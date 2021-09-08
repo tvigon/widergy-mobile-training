@@ -29,7 +29,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 const App: () => Node = () => {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState('0');
   const [aux, setAux] = useState('');
 
   let valueString = '';
@@ -64,6 +64,8 @@ const App: () => Node = () => {
             values={['.', '0', '=']}
             selectedValue={value}
             setSelectedValue={setValue}
+            selectedAux={aux}
+            setSelectedAux={setAux}
           />
         </View>
         <OpCalcButtons
@@ -78,20 +80,44 @@ const App: () => Node = () => {
   );
 };
 
-const buttonPressed = ({values, selectedValue, setSelectedValue}) => {
-  {
-    setSelectedValue(selectedValue + values);
-  }
-};
-
-const CalcButtons = ({values, selectedValue, setSelectedValue}) => (
+const CalcButtons = ({
+  values,
+  selectedValue,
+  setSelectedValue,
+  selectedAux,
+  setSelectedAux,
+}) => (
   <View style={[styles.row, {flex: 1}]}>
     {values.map(val => (
       <TouchableOpacity
         key={val}
         onPress={() => {
           if (val == '=') {
-            alert('se apreto =');
+            if (selectedValue.length !== 0 && selectedAux.length !== 0) {
+              let aux1 = parseFloat(selectedValue);
+              let aux2 = parseFloat(selectedAux.slice(0, -1));
+              setSelectedAux('');
+              switch (selectedAux.slice(-1)) {
+                case '/':
+                  setSelectedValue(`${aux2 / aux1}`);
+                  break;
+                case 'x':
+                  setSelectedValue(`${aux2 * aux1}`);
+                  break;
+                case '-':
+                  setSelectedValue(`${aux2 - aux1}`);
+                  break;
+                case '+':
+                  setSelectedValue(`${aux2 + aux1}`);
+                  break;
+                default:
+                  console.log(
+                    'Lo lamentamos, por el momento no disponemos de ' +
+                      expr +
+                      '.',
+                  );
+              }
+            }
           } else if (val == '.') {
             if (!selectedValue.includes('.')) {
               setSelectedValue(selectedValue + val);
@@ -106,6 +132,10 @@ const CalcButtons = ({values, selectedValue, setSelectedValue}) => (
     ))}
   </View>
 );
+
+const Holas = () => {
+  console.log('aver q onda esto');
+};
 
 const OpCalcButtons = ({
   values,
@@ -122,10 +152,11 @@ const OpCalcButtons = ({
         setSelectedAux('');
       }}
       onPress={() => {
-        if (selectedValue.length != 0) {
+        if (selectedValue.length !== 0) {
           setSelectedValue(selectedValue.slice(0, -1));
         } else {
-          setSelectedAux(selectedAux.slice(0,-1));
+          setSelectedValue(selectedAux.slice(0, -1));
+          setSelectedAux('');
         }
       }}
       style={[styles.opsStyle]}>
@@ -136,13 +167,14 @@ const OpCalcButtons = ({
         key={val}
         onPress={() => {
           if (
-            !selectedValue.includes('/') &&
-            !selectedValue.includes('-') &&
-            !selectedValue.includes('x') &&
-            !selectedValue.includes('+')
+            !selectedAux.includes('/') &&
+            !selectedAux.includes('-') &&
+            !selectedAux.includes('x') &&
+            !selectedAux.includes('+') &&
+            selectedValue.length !== 0
           ) {
-            setSelectedAux(selectedValue);
-            setSelectedValue(val);
+            setSelectedAux(selectedValue + val);
+            setSelectedValue('');
           }
         }}
         style={[styles.opsStyle]}>
