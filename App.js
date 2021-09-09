@@ -18,6 +18,7 @@ import {
   TouchableOpacity,
   useColorScheme,
   View,
+  Number,
 } from 'react-native';
 
 import {
@@ -28,52 +29,36 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const App: () => Node = () => {
+const App = () => {
   const [value, setValue] = useState('0');
   const [aux, setAux] = useState('');
-
-  let valueString = '';
-  const numbers = [1, 2, 3, 4, 5];
+  const [error, setError] = useState('');
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{flex: 1, backgroundColor: 'yellow'}}>
-        <Text style={{fontSize: 48, textAlign: 'right'}}>
+      <View style={styles.screen}>
+        <Text style={styles.screenText}>
+          {error}
           {aux}
           {value}
         </Text>
       </View>
-      <View style={[styles.row, {flex: 3, backgroundColor: 'green'}]}>
-        <View style={{flex: 3, backgroundColor: 'violet'}}>
-          <CalcButtons
-            values={['7', '8', '9']}
-            selectedValue={value}
-            setSelectedValue={setValue}
-          />
-          <CalcButtons
-            values={['4', '5', '6']}
-            selectedValue={value}
-            setSelectedValue={setValue}
-          />
-          <CalcButtons
-            values={['1', '2', '3']}
-            selectedValue={value}
-            setSelectedValue={setValue}
-          />
-          <CalcButtons
-            values={['.', '0', '=']}
-            selectedValue={value}
-            setSelectedValue={setValue}
-            selectedAux={aux}
-            setSelectedAux={setAux}
-          />
-        </View>
+      <View style={[styles.row, styles.allButtons]}>
+        <CalcButtons
+          values={['7', '8', '9', '4', '5', '6', '1', '2', '3', '.', '0', '=']}
+          selectedValue={value}
+          setSelectedValue={setValue}
+          selectedAux={aux}
+          setSelectedAux={setAux}
+          setError={setError}
+        />
         <OpCalcButtons
           values={['x', '/', '-', '+']}
           selectedValue={value}
           setSelectedValue={setValue}
           selectedAux={aux}
           setSelectedAux={setAux}
+          setError={setError}
         />
       </View>
     </SafeAreaView>
@@ -86,20 +71,32 @@ const CalcButtons = ({
   setSelectedValue,
   selectedAux,
   setSelectedAux,
+  setError,
 }) => (
-  <View style={[styles.row, {flex: 1}]}>
+  <View style={[styles.row, styles.numButtons]}>
     {values.map(val => (
       <TouchableOpacity
         key={val}
         onPress={() => {
-          if (val == '=') {
+          setError('');
+          if (val === '=') {
             if (selectedValue.length !== 0 && selectedAux.length !== 0) {
               let aux1 = parseFloat(selectedValue);
               let aux2 = parseFloat(selectedAux.slice(0, -1));
               setSelectedAux('');
               switch (selectedAux.slice(-1)) {
                 case '/':
-                  setSelectedValue(`${aux2 / aux1}`);
+                  if (
+                    aux2 / aux1 === Infinity ||
+                    aux2 / aux1 === -Infinity ||
+                    isNaN(aux2 / aux1)
+                  ) {
+                    setError('mathError');
+                    setSelectedAux('');
+                    setSelectedValue('');
+                  } else {
+                    setSelectedValue(`${aux2 / aux1}`);
+                  }
                   break;
                 case 'x':
                   setSelectedValue(`${aux2 * aux1}`);
@@ -112,14 +109,16 @@ const CalcButtons = ({
                   break;
                 default:
                   console.log(
-                    'Lo lamentamos, por el momento no disponemos de ' +
-                      expr +
-                      '.',
+                    'Lo lamentamos, por el momento no disponemos de eso.',
                   );
               }
             }
-          } else if (val == '.') {
-            if (!selectedValue.includes('.')) {
+          } else if (val === '.') {
+            if (
+              !selectedValue.includes('.') &&
+              selectedValue.length !== 0 &&
+              selectedValue[selectedValue.length - 1] !== '-'
+            ) {
               setSelectedValue(selectedValue + val);
             }
           } else {
@@ -127,7 +126,7 @@ const CalcButtons = ({
           }
         }}
         style={[styles.buttonStyle]}>
-        <Text style={{textAlign: 'center', fontSize: 48}}>{val}</Text>
+        <Text style={[styles.text]}>{val}</Text>
       </TouchableOpacity>
     ))}
   </View>
@@ -143,15 +142,18 @@ const OpCalcButtons = ({
   setSelectedValue,
   selectedAux,
   setSelectedAux,
+  setError,
 }) => (
-  <View style={{flex: 1, backgroundColor: 'red'}}>
+  <View style={[styles.opsStyle]}>
     <TouchableOpacity
       key="DEL"
       onLongPress={() => {
         setSelectedValue('');
         setSelectedAux('');
+        setError('');
       }}
       onPress={() => {
+        setError('');
         if (selectedValue.length !== 0) {
           setSelectedValue(selectedValue.slice(0, -1));
         } else {
@@ -160,12 +162,16 @@ const OpCalcButtons = ({
         }
       }}
       style={[styles.opsStyle]}>
-      <Text style={{textAlign: 'center', fontSize: 48}}>DEL</Text>
+      <Text style={[styles.text]}>DEL</Text>
     </TouchableOpacity>
     {values.map(val => (
       <TouchableOpacity
         key={val}
         onPress={() => {
+          setError('');
+          if (val === '-' && selectedValue.length === 0) {
+            setSelectedValue(val);
+          }
           if (
             !selectedAux.includes('/') &&
             !selectedAux.includes('-') &&
@@ -173,12 +179,14 @@ const OpCalcButtons = ({
             !selectedAux.includes('+') &&
             selectedValue.length !== 0
           ) {
-            setSelectedAux(selectedValue + val);
-            setSelectedValue('');
+            if (selectedValue.length !== 1 || selectedValue[0] !== '-') {
+              setSelectedAux(selectedValue + val);
+              setSelectedValue('');
+            }
           }
         }}
         style={[styles.opsStyle]}>
-        <Text style={{textAlign: 'center', fontSize: 48}}>{val}</Text>
+        <Text style={[styles.text]}>{val}</Text>
       </TouchableOpacity>
     ))}
   </View>
@@ -189,6 +197,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
+  screen: {
+    flex: 1,
+    backgroundColor: 'lightsteelblue',
+  },
   row: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -197,18 +209,31 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     flexWrap: 'wrap',
   },
+  allButtons: {
+    flex: 3,
+    backgroundColor: 'green',
+  },
+  numButtons: {
+    flex: 3,
+    backgroundColor: 'navy',
+  },
   buttonStyle: {
-    flex: 1,
-    backgroundColor: 'lime',
-    height: '100%',
-    alignContent: 'stretch',
+    //estos numeros son re magicos dentro de calc butons
+    width: '33.3%',
+    height: '25%',
+    backgroundColor: 'orange',
   },
   opsStyle: {
     flex: 1,
-    backgroundColor: 'mediumorchid',
+    backgroundColor: 'yellowgreen',
   },
   text: {
+    fontSize: 48,
     textAlign: 'center',
+  },
+  screenText: {
+    fontSize: 48,
+    textAlign: 'right',
   },
 });
 
