@@ -8,6 +8,8 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: 'lightsteelblue',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
   },
   row: {
     flexDirection: 'row',
@@ -39,9 +41,17 @@ const styles = StyleSheet.create({
     fontSize: 48,
     textAlign: 'center',
   },
+  auxText: {
+    fontSize: 24,
+    padding: 5,
+  },
   screenText: {
     fontSize: 48,
-    textAlign: 'right',
+    //textAlign: 'right',
+  },
+  screenButtons: {
+    flexDirection: 'row-reverse',
+    backgroundColor: 'blue',
   },
 });
 
