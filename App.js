@@ -137,14 +137,11 @@ const getScreenButtons = setVal => [
   {label: '3', onPress: () => {setVal(prevValue => numButton(prevValue, '3'));}},
   {label: '0', onPress: () => {setVal(prevValue => numButton(prevValue, '0'));}},
   {label: '.', onPress: () => {setVal(prevValue => pointButt(prevValue));}},
+  {label: 'DEL', onPress: () => {setVal(prevValue => delOperator(prevValue));}, onLongPress: () => {setVal('');}},
   {label: '+', onPress: () => {setVal(prevValue => calcOperator(prevValue,'+'));}},
   {label: '-', onPress: () => {setVal(prevValue => calcOperator(prevValue,'-'));}},
   {label: 'x', onPress: () => {setVal(prevValue => calcOperator(prevValue,'x'));}},
   {label: '/', onPress: () => {setVal(prevValue => calcOperator(prevValue,'/'));}},
-];
-
-const getOpScreenButtons = setVal => [
-  {label: 'DEL', onPress: () => {setVal(prevValue => delOperator(prevValue));}, onLongPress: () => {setVal('');}},
   {label: '=', onPress: () => {setVal(prevValue => solveEquation(prevValue));}},
 ];
 
@@ -156,11 +153,8 @@ const renderButtons = (button, useNumericalStyle ) => (
 
 const App = () => {
   const [value, setValue] = useState('');
-  const [aux, setAux] = useState('');
-  const [error, setError] = useState('');
 
   const SCREEN_BUTTONS = getScreenButtons(setValue);
-  const OP_SCREEN_BUTTONS = getOpScreenButtons(setValue);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.screen}>
@@ -172,12 +166,10 @@ const App = () => {
       </View>
       <View style={[styles.row, styles.allButtons]}>
         <View style={[styles.row, styles.numButtons]}>
-          {SCREEN_BUTTONS.splice(0, 11).map(button => renderButtons(button, true))}
-          {OP_SCREEN_BUTTONS.splice(0,1).map(button => renderButtons(button,true))}
+          {SCREEN_BUTTONS.splice(0, 12).map(button => renderButtons(button, true))}
         </View>
         <View style={[styles.opsStyle]}>
-          {SCREEN_BUTTONS.splice(0, 4).map(button => renderButtons(button, false))}
-          {OP_SCREEN_BUTTONS.splice(0,1).map(button => renderButtons(button,false))}
+          {SCREEN_BUTTONS.splice(0, 5).map(button => renderButtons(button, false))}
         </View>
       </View>
     </SafeAreaView>
