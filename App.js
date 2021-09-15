@@ -15,13 +15,13 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {Button, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 
-function DetailsScreen({navigation}) {
+function HistoryScreen({navigation}) {
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Details Screen</Text>
+      <Text>History Screen</Text>
       <Button
-        title="Go to Details... again"
-        onPress={() => navigation.push('Details')}
+        title="Go to History... again"
+        onPress={() => navigation.push('History')}
       />
       <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
       <Button title="Go back" onPress={() => navigation.goBack()} />
@@ -47,10 +47,10 @@ function HomeScreen({navigation}) {
           {value}
         </Text>
         <TouchableOpacity
-          title="Go to Details"
-          onPress={() => navigation.navigate('Details')}
+          title="Go to History"
+          onPress={() => navigation.navigate('History')}
           style={[styles.screenButtons]}>
-          <Text style={styles.auxText}>LOG REGISTER</Text>
+          <Text style={styles.auxText}>HISTORY</Text>
         </TouchableOpacity>
       </View>
       <View style={[styles.row, styles.allButtons]}>
@@ -84,7 +84,7 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Details" component={DetailsScreen} />
+        <Stack.Screen name="History" component={HistoryScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
