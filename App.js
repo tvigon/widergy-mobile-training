@@ -159,8 +159,6 @@ const App = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.screen}>
         <Text style={styles.screenText}>
-          {error}
-          {aux}
           {value}
         </Text>
       </View>
