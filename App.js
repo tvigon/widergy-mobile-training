@@ -35,7 +35,7 @@ function HomeScreen({navigation}) {
   const [value, setValue] = useState('0');
   const [aux, setAux] = useState('');
   const [error, setError] = useState('');
-  const logArray = ['a', 'b', 'c', 'd', 'eee', 'a', 'b', 'c', 'd', 'eee', 'a', 'b', 'c', 'd', 'eee', 'a', 'b', 'c', 'd', 'eee', 'a', 'b', 'c', 'd', 'eee'];
+  const [logArray, setLogArray] = useState(['']);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -65,6 +65,8 @@ function HomeScreen({navigation}) {
             selectedAux={aux}
             setSelectedAux={setAux}
             setError={setError}
+            selectedLogArr={logArray}
+            setLogArr={setLogArray}
           />
         </View>
         <OpCalcButtons
