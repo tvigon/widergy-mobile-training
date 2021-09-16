@@ -13,30 +13,29 @@ import styles from './styles';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import {Button, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
+import {Button, SafeAreaView, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 
-function HistoryScreen({navigation}) {
+function HistoryScreen({route, navigation}) {
+  const {logValue} = route.params;
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>History Screen</Text>
-      <Button
-        title="Go to History... again"
-        onPress={() => navigation.push('History')}
-      />
-      <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
+    <View style={{flex: 1}}> 
+      <ScrollView style={styles.container}>
+        {logValue.map(text => renderText(text))}
+      </ScrollView>
       <Button title="Go back" onPress={() => navigation.goBack()} />
-      <Button
-        title="Go back to first screen in stack"
-        onPress={() => navigation.popToTop()}
-      />
     </View>
   );
 }
+
+const renderText = text => (
+  <Text style={{alignSelf: 'center', fontSize: 30}}>{text}</Text>
+);
 
 function HomeScreen({navigation}) {
   const [value, setValue] = useState('0');
   const [aux, setAux] = useState('');
   const [error, setError] = useState('');
+  const logArray = ['a', 'b', 'c', 'd', 'eee', 'a', 'b', 'c', 'd', 'eee', 'a', 'b', 'c', 'd', 'eee', 'a', 'b', 'c', 'd', 'eee', 'a', 'b', 'c', 'd', 'eee'];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -48,7 +47,11 @@ function HomeScreen({navigation}) {
         </Text>
         <TouchableOpacity
           title="Go to History"
-          onPress={() => navigation.navigate('History')}
+          onPress={() =>
+            navigation.navigate('History', {
+              logValue: logArray,
+            })
+          }
           style={[styles.screenButtons]}>
           <Text style={styles.auxText}>HISTORY</Text>
         </TouchableOpacity>
