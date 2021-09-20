@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'navy',
   },
   buttonStyle: {
-    //estos numeros son re magicos dentro de calc butons
     width: '33.3%',
     height: '25%',
     backgroundColor: 'orange',
