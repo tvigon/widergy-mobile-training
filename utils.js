@@ -159,12 +159,12 @@ const solveEquation = (str, firstStr, setArr, arr) => {
   } else {
     if (isNaN(str) || str === 'Infinity' || str === '-Infinity') {
       let auxArr = [...arr];
-      auxArr.push(firstStr + '=' + 'mathError');
+      auxArr.unshift(firstStr + '=' + 'mathError');
       setArr(auxArr);
       return 'mathError';
     } else {
       let auxArr = [...arr];
-      auxArr.push(firstStr + '=' + str);
+      auxArr.unshift(firstStr + '=' + str);
       setArr(auxArr);
       return str;
     }
