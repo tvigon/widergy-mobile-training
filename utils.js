@@ -58,7 +58,7 @@ const getOpButtons = (setVal, setArray, arr) => [
 ];
 
 const pointButt = val => {
-  if (/[a]+/g.test(val)) {
+  if (/[Error]+/g.test(val)) {
     return '.';
   }
   let myRe = /[^-+/x]+$/g;
@@ -73,7 +73,7 @@ const pointButt = val => {
 };
 
 const delOperator = val => {
-  if (/[a]+/g.test(val)) {
+  if (/[Error]+/g.test(val)) {
     return '';
   }
   if (val.length !== 0) {
@@ -84,23 +84,17 @@ const delOperator = val => {
 };
 
 const numButton = (val, num) => {
-  if (/[a]+/g.test(val)) {
+  if (/[Error]+/g.test(val)) {
     return num;
   }
   return val + num;
 };
 
 const calcOperator = (val, char) => {
-  if (/[a]+/g.test(val)) {
+  if (/[Error]+/g.test(val)) {
     return '';
   }
-  let myRe = /[^-+/x.]+$/g;
-  let match = myRe.exec(val);
-  if (match === null) {
-    return val;
-  } else {
-    return val + char;
-  }
+  return val + char;
 };
 
 const priorityParse = str => {
@@ -138,9 +132,9 @@ const lessPriorityParse = str => {
 };
 
 const solveEquation = (str, firstStr, setArr, arr) => {
-  let firstRegex = /[-]?[.]?[0-9]*[.]?[0-9]+[/x][.]?[0-9]*[.]?[0-9]+/g;
+  let firstRegex = /[-]?[.]?[0-9]*[.]?[0-9]+[/x][-]?[.]?[0-9]*[.]?[0-9]+/g;
   let firstMatch = firstRegex.exec(str);
-  let secRegex = /[-]?[.]?[0-9]*[.]?[0-9]+[+-][.]?[0-9]*[.]?[0-9]+/g;
+  let secRegex = /[-]?[.]?[0-9]*[.]?[0-9]+[+-][-]?[.]?[0-9]*[.]?[0-9]+/g;
   let secMatch = secRegex.exec(str);
   if (firstMatch !== null) {
     return solveEquation(
@@ -159,9 +153,9 @@ const solveEquation = (str, firstStr, setArr, arr) => {
   } else {
     if (isNaN(str) || str === 'Infinity' || str === '-Infinity') {
       let auxArr = [...arr];
-      auxArr.unshift(firstStr + '=' + 'mathError');
+      auxArr.unshift(firstStr + '=' + 'Error');
       setArr(auxArr);
-      return 'mathError';
+      return 'Error';
     } else {
       let auxArr = [...arr];
       auxArr.unshift(firstStr + '=' + str);
