@@ -24,12 +24,37 @@ const getOpNumButt = setVal => [
   },
 ];
 
-const getOpButtons = setVal => [
-  {label: '+', onPress: () => {setVal(prevValue => calcOperator(prevValue,'+'));}},
-  {label: '-', onPress: () => {setVal(prevValue => calcOperator(prevValue,'-'));}},
-  {label: 'x', onPress: () => {setVal(prevValue => calcOperator(prevValue,'x'));}},
-  {label: '/', onPress: () => {setVal(prevValue => calcOperator(prevValue,'/'));}},
-  {label: '=', onPress: () => {setVal(prevValue => solveEquation(prevValue));}},
+const getOpButtons = (setVal, setArray, arr) => [
+  {
+    label: '+',
+    onPress: () => {
+      setVal(prevValue => calcOperator(prevValue, '+'));
+    },
+  },
+  {
+    label: '-',
+    onPress: () => {
+      setVal(prevValue => calcOperator(prevValue, '-'));
+    },
+  },
+  {
+    label: 'x',
+    onPress: () => {
+      setVal(prevValue => calcOperator(prevValue, 'x'));
+    },
+  },
+  {
+    label: '/',
+    onPress: () => {
+      setVal(prevValue => calcOperator(prevValue, '/'));
+    },
+  },
+  {
+    label: '=',
+    onPress: () => {
+      setVal(prevValue => solveEquation(prevValue, prevValue, setArray, arr));
+    },
+  },
 ];
 
 const pointButt = val => {
@@ -78,7 +103,7 @@ const calcOperator = (val, char) => {
   }
 };
 
-const simpleParse = str => {
+const priorityParse = str => {
   if (str.indexOf('/') !== -1) {
     let num1 = parseFloat(str.slice(0, str.indexOf('/')));
     let num2 = parseFloat(str.slice(str.indexOf('/') + 1));
@@ -97,30 +122,50 @@ const lessPriorityParse = str => {
     let num2 = parseFloat(str.slice(str.indexOf('+') + 1));
     return num1 + num2;
   }
-  if (str.indexOf('-') !== -1) {
+  if (str.indexOf('-') === 0) {
+    let newStr = str.slice(1);
+    let newIndex = newStr.indexOf('-');
+    if (newIndex !== -1) {
+      let num1 = parseFloat(str.slice(0, newIndex + 1));
+      let num2 = parseFloat(str.slice(newIndex + 1 + 1));
+      return num1 - num2;
+    }
+  } else if (str.indexOf('-') !== -1) {
     let num1 = parseFloat(str.slice(0, str.indexOf('-')));
     let num2 = parseFloat(str.slice(str.indexOf('-') + 1));
     return num1 - num2;
   }
 };
 
-const solveEquation = str => {
+const solveEquation = (str, firstStr, setArr, arr) => {
   let firstRegex = /[-]?[.]?[0-9]*[.]?[0-9]+[/x][.]?[0-9]*[.]?[0-9]+/g;
   let firstMatch = firstRegex.exec(str);
   let secRegex = /[-]?[.]?[0-9]*[.]?[0-9]+[+-][.]?[0-9]*[.]?[0-9]+/g;
   let secMatch = secRegex.exec(str);
   if (firstMatch !== null) {
     return solveEquation(
-      str.replace(firstMatch[0], simpleParse(firstMatch[0])),
+      str.replace(firstMatch[0], priorityParse(firstMatch[0])),
+      firstStr,
+      setArr,
+      arr,
     );
   } else if (secMatch !== null) {
     return solveEquation(
       str.replace(secMatch[0], lessPriorityParse(secMatch[0])),
+      firstStr,
+      setArr,
+      arr,
     );
   } else {
     if (isNaN(str) || str === 'Infinity' || str === '-Infinity') {
+      let auxArr = [...arr];
+      auxArr.push(firstStr + '=' + 'mathError');
+      setArr(auxArr);
       return 'mathError';
     } else {
+      let auxArr = [...arr];
+      auxArr.push(firstStr + '=' + str);
+      setArr(auxArr);
       return str;
     }
   }
