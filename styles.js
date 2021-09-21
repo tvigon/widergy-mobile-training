@@ -44,6 +44,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     padding: 5,
   },
+  historyText: {
+    alignSelf: 'center',
+    fontSize: 30,
+  },
   screenText: {
     fontSize: 48,
   },

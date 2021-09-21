@@ -10,18 +10,12 @@ import {
 
 import styles from '../styles';
 
-const HistoryScreen = ({route, navigation}) => {
-  const {logValue} = route.params;
-
-  const renderText = text => (
-    <Text style={{alignSelf: 'center', fontSize: 30}}>{text}</Text>
-  );
+const HistoryScreen = ({navigation}) => {
+  const renderText = text => <Text style={[styles.historyText]}>{text}</Text>;
 
   return (
-    <View style={{flex: 1}}>
-      <ScrollView style={styles.container}>
-        {logValue.map(text => renderText(text))}
-      </ScrollView>
+    <View style={[styles.container]}>
+      <ScrollView style={styles.container} />
       <Button title="Go back" onPress={() => navigation.goBack()} />
     </View>
   );
