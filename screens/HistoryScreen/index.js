@@ -8,14 +8,16 @@ import {
   View,
 } from 'react-native';
 
-import styles from '../styles';
+import historyStyles from './styles';
 
 const HistoryScreen = ({navigation}) => {
-  const renderText = text => <Text style={[styles.historyText]}>{text}</Text>;
+  const renderText = text => (
+    <Text style={[historyStyles.historyText]}>{text}</Text>
+  );
 
   return (
-    <View style={[styles.container]}>
-      <ScrollView style={styles.container} />
+    <View style={[historyStyles.container]}>
+      <ScrollView style={historyStyles.container} />
       <Button title="Go back" onPress={() => navigation.goBack()} />
     </View>
   );

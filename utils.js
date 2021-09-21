@@ -6,7 +6,7 @@ const getNumButt = (value, setVal, operation) =>
     },
   }));
 
-const getOpNumButt = setVal => [
+const getPointDelButt = setVal => [
   {
     label: '.',
     onPress: () => {
@@ -171,7 +171,7 @@ export {
   numButton,
   solveEquation,
   calcOperator,
-  getOpNumButt,
+  getPointDelButt,
   getOpButtons,
   getNumButt,
 };
