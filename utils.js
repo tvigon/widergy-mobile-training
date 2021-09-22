@@ -24,31 +24,13 @@ const getPointDelButt = setVal => [
   },
 ];
 
-const getOpButtons = (setVal, setArray, arr) => [
-  {
-    label: '+',
+const getOpButtons = (opArr, setVal, setArray, arr) => [
+  ...opArr.map(val => ({
+    label: val,
     onPress: () => {
-      setVal(prevValue => calcOperator(prevValue, '+'));
+      setVal(prevValue => calcOperator(prevValue, val));
     },
-  },
-  {
-    label: '-',
-    onPress: () => {
-      setVal(prevValue => calcOperator(prevValue, '-'));
-    },
-  },
-  {
-    label: 'x',
-    onPress: () => {
-      setVal(prevValue => calcOperator(prevValue, 'x'));
-    },
-  },
-  {
-    label: '/',
-    onPress: () => {
-      setVal(prevValue => calcOperator(prevValue, '/'));
-    },
-  },
+  })),
   {
     label: '=',
     onPress: () => {
@@ -61,8 +43,8 @@ const pointButt = val => {
   if (/[Error]+/g.test(val)) {
     return '.';
   }
-  let myRe = /[^-+/x]+$/g;
-  let match = myRe.exec(val);
+  const POINTREGEX = /[^-+/x]+$/g;
+  let match = POINTREGEX.exec(val);
   if (match === null) {
     return val + '.';
   } else if (!match[0].includes('.')) {
@@ -132,10 +114,10 @@ const lessPriorityParse = str => {
 };
 
 const solveEquation = (str, firstStr, setArr, arr) => {
-  let firstRegex = /[-]?[.]?[0-9]*[.]?[0-9]+[/x][-]?[.]?[0-9]*[.]?[0-9]+/g;
-  let firstMatch = firstRegex.exec(str);
-  let secRegex = /[-]?[.]?[0-9]*[.]?[0-9]+[+-][-]?[.]?[0-9]*[.]?[0-9]+/g;
-  let secMatch = secRegex.exec(str);
+  const PRIORITYREGEX = /[-]?[.]?[0-9]*[.]?[0-9]+[/x][-]?[.]?[0-9]*[.]?[0-9]+/g;
+  let firstMatch = PRIORITYREGEX.exec(str);
+  const SECONDARYREGEX = /[-]?[.]?[0-9]*[.]?[0-9]+[+-][-]?[.]?[0-9]*[.]?[0-9]+/g;
+  let secMatch = SECONDARYREGEX.exec(str);
   if (firstMatch !== null) {
     return solveEquation(
       str.replace(firstMatch[0], priorityParse(firstMatch[0])),
