@@ -7,8 +7,9 @@ import {
 } from '../../utils';
 
 import homeStyles from './styles';
-import {CalcButtons, MyButton} from '../../components/CalcButtons';
+import MyButton from '../../components/MyButton';
 
+import {OP_ARRAY, NUM_ARRAY} from './constants';
 import {
   Button,
   SafeAreaView,
@@ -21,10 +22,8 @@ import {
 const HomeScreen = ({navigation}) => {
   const [value, setValue] = useState('');
   const [logArray, setLogArray] = useState([]);
-  const NUMARRAY = ['7', '8', '9', '4', '5', '6', '1', '2', '3', '0'];
-  const OPARRAY = ['+', '-', 'x', '/'];
-  const OPERATION_BUTTONS = getOpButtons(OPARRAY, setValue, setLogArray, logArray);
-  const NUMBER_BUTTONS = getNumButt(NUMARRAY, setValue, numButton);
+  const OPERATION_BUTTONS = getOpButtons(OP_ARRAY, setValue, setLogArray, logArray);
+  const NUMBER_BUTTONS = getNumButt(NUM_ARRAY, setValue, numButton);
   const POINT_DEL_BUTT = getPointDelButt(setValue);
 
   return (
@@ -42,11 +41,26 @@ const HomeScreen = ({navigation}) => {
         />
       </View>
       <View style={[homeStyles.row, homeStyles.allButtons]}>
-        <CalcButtons
-          arrayButt={[...NUMBER_BUTTONS, ...POINT_DEL_BUTT]}
-          style={true}
-        />
-        <CalcButtons arrayButt={OPERATION_BUTTONS} style={false} />
+        <View style={[homeStyles.row, homeStyles.numButtons]}>
+          {[...NUMBER_BUTTONS, ...POINT_DEL_BUTT].map(button => (
+            <MyButton
+              label={button.label}
+              press={button.onPress}
+              style={[homeStyles.buttonStyle]}
+              longPress={button.onLongPress}
+            />
+          ))}
+        </View>
+        <View style={[homeStyles.opsStyle]}>
+          {OPERATION_BUTTONS.map(button => (
+            <MyButton
+              label={button.label}
+              press={button.onPress}
+              style={[homeStyles.opsStyle]}
+              longPress={button.onLongPress}
+            />
+          ))}
+        </View>
       </View>
     </SafeAreaView>
   );

@@ -114,10 +114,10 @@ const lessPriorityParse = str => {
 };
 
 const solveEquation = (str, firstStr, setArr, arr) => {
-  const PRIORITYREGEX = /[-]?[.]?[0-9]*[.]?[0-9]+[/x][-]?[.]?[0-9]*[.]?[0-9]+/g;
-  let firstMatch = PRIORITYREGEX.exec(str);
-  const SECONDARYREGEX = /[-]?[.]?[0-9]*[.]?[0-9]+[+-][-]?[.]?[0-9]*[.]?[0-9]+/g;
-  let secMatch = SECONDARYREGEX.exec(str);
+  const PARSE_MULT_DIVISION = /[-]?[.]?[0-9]*[.]?[0-9]+[/x][-]?[.]?[0-9]*[.]?[0-9]+/g;
+  let firstMatch = PARSE_MULT_DIVISION.exec(str);
+  const PARSE_SUM_SUBS = /[-]?[.]?[0-9]*[.]?[0-9]+[+-][-]?[.]?[0-9]*[.]?[0-9]+/g;
+  let secMatch = PARSE_SUM_SUBS.exec(str);
   if (firstMatch !== null) {
     return solveEquation(
       str.replace(firstMatch[0], priorityParse(firstMatch[0])),

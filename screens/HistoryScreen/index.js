@@ -10,14 +10,18 @@ import {
 
 import historyStyles from './styles';
 
-const HistoryScreen = ({navigation}) => {
+const HistoryScreen = ({route, navigation}) => {
+  const {logValue} = route.params;
+
   const renderText = text => (
     <Text style={[historyStyles.historyText]}>{text}</Text>
   );
 
   return (
     <View style={[historyStyles.container]}>
-      <ScrollView style={historyStyles.container} />
+      <ScrollView style={historyStyles.container}>
+        {logValue.map(text => renderText(text))}
+      </ScrollView>
       <Button title="Go back" onPress={() => navigation.goBack()} />
     </View>
   );
