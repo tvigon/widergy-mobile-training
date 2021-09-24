@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import {Provider, connect} from 'react-redux';
+
 import {
   numButton,
   getPointDelButt,
@@ -19,10 +21,19 @@ import {
   View,
 } from 'react-native';
 
-const HomeScreen = ({navigation}) => {
+let nextExpressionId = 0;
+const addExpression = text => {
+  return {
+    type: 'SAVE_EXPRESSION',
+    id: nextExpressionId++,
+    text,
+  };
+};
+
+const HomeScreen = ({navigation, dispatch}) => {
   const [value, setValue] = useState('');
-  const [logArray, setLogArray] = useState([]);
-  const OPERATION_BUTTONS = getOpButtons(OP_ARRAY, setValue, setLogArray, logArray);
+  const [logExpression, setLogExpression] = useState();
+  const OPERATION_BUTTONS = getOpButtons(OP_ARRAY, setValue, setLogExpression);
   const NUMBER_BUTTONS = getNumButt(NUM_ARRAY, setValue, numButton);
   const POINT_DEL_BUTT = getPointDelButt(setValue);
 
@@ -30,13 +41,16 @@ const HomeScreen = ({navigation}) => {
     <SafeAreaView style={homeStyles.container}>
       <View style={homeStyles.screen}>
         <Text style={homeStyles.screenText}>{value}</Text>
-        <MyButton
-          label={'HISTORY'}
-          press={() =>
-            navigation.navigate('History', {
-              logValue: logArray,
-            })
-          }
+        <Button
+          title="SAVE HISTORY"
+          onPress={() => {
+            dispatch(addExpression(logExpression));
+          }}
+          style={[homeStyles.screenButtons]}
+        />
+        <Button
+          title="HISTORY"
+          onPress={() => navigation.navigate('History')}
           style={[homeStyles.screenButtons]}
         />
       </View>
@@ -66,4 +80,4 @@ const HomeScreen = ({navigation}) => {
   );
 };
 
-export default HomeScreen;
+export default connect()(HomeScreen);
