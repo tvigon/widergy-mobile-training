@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 
+import {actions} from '../../redux/history/actions';
+
 import {Provider, connect} from 'react-redux';
 import {
   Button,
@@ -12,23 +14,20 @@ import {
 } from 'react-native';
 
 import historyStyles from './styles';
-
-const HistoryText = ({onClick, text}) => (
-  <Text onClick={onClick} style={[historyStyles.historyText]}>
-    {text}
-  </Text>
-);
+import MyButton from '../../components/MyButton';
 
 const DelButton = ({onClick}) => (
-  <Button title={'x'} onPress={onClick} style={{backgroundColor: 'orange'}}>
-    X
-  </Button>
+  <MyButton
+    label={'x'}
+    press={onClick}
+    style={{flex: 1, backgroundColor: 'yellow'}}
+  />
 );
 
 const History = ({history, onHistoryClick, delClick}) => (
   <ScrollView style={historyStyles.container}>
     {history.map(item => (
-      <View>
+      <View style={{flexDirection: 'row'}}>
         <TextInput
           key={item.id}
           style={[historyStyles.historyText]}
@@ -42,8 +41,9 @@ const History = ({history, onHistoryClick, delClick}) => (
 );
 
 const mapStateToProps = state => {
+  console.log(state.history.historyLog);
   return {
-    history: state.historyLog,
+    history: state.history.historyLog,
   };
 };
 
@@ -51,7 +51,7 @@ const mapDispatchToProps = dispatch => {
   return {
     onHistoryClick: (id, text) => {
       dispatch({
-        type: 'EDIT_EXPRESSION',
+        type: actions.EDIT_EXPRESSION,
         id,
         text: text,
       });
@@ -59,7 +59,7 @@ const mapDispatchToProps = dispatch => {
     delClick: id => {
       console.log('id ' + id);
       dispatch({
-        type: 'DELETE_EXPRESSION',
+        type: actions.DELETE_EXPRESSION,
         id,
       });
     },
@@ -69,11 +69,6 @@ const mapDispatchToProps = dispatch => {
 const HistoryList = connect(mapStateToProps, mapDispatchToProps)(History);
 
 const HistoryScreen = ({dispatch}) => {
-
-  const renderText = text => (
-    <Text style={[historyStyles.historyText]}>{text}</Text>
-  );
-
   return (
     <View style={[historyStyles.container]}>
       <HistoryList />
@@ -81,7 +76,7 @@ const HistoryScreen = ({dispatch}) => {
         title="Delete all"
         onPress={() =>
           dispatch({
-            type: 'DELETE_ALL',
+            type: actions.DELETE_ALL,
           })
         }
       />

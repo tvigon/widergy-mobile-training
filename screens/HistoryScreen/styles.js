@@ -6,6 +6,7 @@ const historyStyles = StyleSheet.create({
     flexDirection: 'column',
   },
   historyText: {
+    flex: 5,
     alignSelf: 'center',
     fontSize: 30,
   },

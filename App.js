@@ -18,6 +18,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HistoryScreen from './screens/HistoryScreen/index';
 import HomeScreen from './screens/HomeScreen/index';
 
+import history from './redux/history/reducer';
 
 const expression = (state, action) => {
   switch (action.type) {
@@ -59,9 +60,8 @@ const historyLog = (state = [], action) => {
 
 
 const calcApp = combineReducers({
-  historyLog,
+  history,
 });
-
 
 const Stack = createNativeStackNavigator();
 

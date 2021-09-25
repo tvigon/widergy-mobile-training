@@ -8,6 +8,8 @@ import {
   getNumButt,
 } from '../../utils';
 
+import {actions} from '../../redux/history/actions';
+
 import homeStyles from './styles';
 import MyButton from '../../components/MyButton';
 
@@ -24,7 +26,7 @@ import {
 let nextExpressionId = 0;
 const addExpression = text => {
   return {
-    type: 'SAVE_EXPRESSION',
+    type: actions.SAVE_EXPRESSION,
     id: nextExpressionId++,
     text,
   };

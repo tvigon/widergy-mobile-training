@@ -37,6 +37,7 @@ const homeStyles = StyleSheet.create({
     backgroundColor: 'yellowgreen',
   },
   text: {
+    justifyContent: 'center',
     fontSize: 48,
     textAlign: 'center',
   },
