@@ -42,6 +42,7 @@ const History = ({history, onHistoryClick, delClick}) => (
 
 const mapStateToProps = state => {
   console.log(state.history.historyLog);
+  console.log(actions.EDIT_EXPRESSION);
   return {
     history: state.history.historyLog,
   };

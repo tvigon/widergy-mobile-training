@@ -5,12 +5,12 @@ import {actions} from './actions';
 const expression = (state, action) => {
   console.log('entrooooo???' + action);
   switch (action.type) {
-    case 'SAVE_EXPRESSION':
+    case '@@HISTORY/SAVE_EXPRESSION':
       return {
         id: action.id,
         text: action.text,
       };
-    case 'EDIT_EXPRESSION':
+    case '@@HISTORY/EDIT_EXPRESSION':
       if (state.id !== action.id) {
         return state;
       }
@@ -45,21 +45,20 @@ const reducerDescription = {
   override: {
     [actions.SAVE_EXPRESSION]: (state, action) => ({
       ...state,
+      historyLog: [...state.historyLog, expression(undefined, action)],
+    }),
+    [actions.EDIT_EXPRESSION]: (state, action) => ({
+      ...state,
+      historyLog: state.historyLog.map(t => expression(t, action)),
+    }),
+    [actions.DELETE_EXPRESSION]: (state, action) => ({
+      ...state,
       historyLog: [
-        ...state.historyLog,
-        {
-          id: action.id,
-          text: action.text,
-        },
+        ...state.historyLog.slice(0, action.id),
+        ...state.historyLog.slice(action.id + 1),
       ],
     }),
-    [actions.EDIT_EXPRESSION]: (state, action) =>
-      state.map(t => expression(t, action)),
-    [actions.DELETE_EXPRESSION]: (state, action) => [
-      ...state.slice(0, action.id),
-      ...state.slice(action.id + 1),
-    ],
-    [actions.DELETE_ALL]: (state, action) => ({...state, tomi: 'chau'}),
+    [actions.DELETE_ALL]: (state, action) => ({...state, historyLog: []}),
   },
 };
 export default createReducer(initialState, completeReducer(reducerDescription));
