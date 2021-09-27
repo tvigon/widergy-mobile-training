@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-import {actions} from '../../redux/history/actions';
+import {actions, actionCreators} from '../../redux/history/actions';
 
 import {Provider, connect} from 'react-redux';
 import {
@@ -42,7 +42,6 @@ const History = ({history, onHistoryClick, delClick}) => (
 
 const mapStateToProps = state => {
   console.log(state.history.historyLog);
-  console.log(actions.EDIT_EXPRESSION);
   return {
     history: state.history.historyLog,
   };
@@ -51,18 +50,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     onHistoryClick: (id, text) => {
-      dispatch({
-        type: actions.EDIT_EXPRESSION,
-        id,
-        text: text,
-      });
+      dispatch(actionCreators.modifyExpression(id, text));
     },
     delClick: id => {
-      console.log('id ' + id);
-      dispatch({
-        type: actions.DELETE_EXPRESSION,
-        id,
-      });
+      dispatch(actionCreators.deleteExpression(id));
     },
   };
 };
@@ -75,11 +66,7 @@ const HistoryScreen = ({dispatch}) => {
       <HistoryList />
       <Button
         title="Delete all"
-        onPress={() =>
-          dispatch({
-            type: actions.DELETE_ALL,
-          })
-        }
+        onPress={() => dispatch(actionCreators.deleteAllExpressions())}
       />
     </View>
   );

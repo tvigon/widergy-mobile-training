@@ -8,7 +8,7 @@ import {
   getNumButt,
 } from '../../utils';
 
-import {actions} from '../../redux/history/actions';
+import {actions, actionCreators} from '../../redux/history/actions';
 
 import homeStyles from './styles';
 import MyButton from '../../components/MyButton';
@@ -32,7 +32,7 @@ const addExpression = text => {
   };
 };
 
-const HomeScreen = ({navigation, dispatch}) => {
+const HomeScreen = ({navigation, dispatch, historyArr}) => {
   const [value, setValue] = useState('');
   const [logExpression, setLogExpression] = useState();
   const OPERATION_BUTTONS = getOpButtons(OP_ARRAY, setValue, setLogExpression);
@@ -46,7 +46,7 @@ const HomeScreen = ({navigation, dispatch}) => {
         <Button
           title="SAVE HISTORY"
           onPress={() => {
-            dispatch(addExpression(logExpression));
+            dispatch(actionCreators.addExpression(logExpression, historyArr));
           }}
           style={[homeStyles.screenButtons]}
         />
@@ -82,4 +82,11 @@ const HomeScreen = ({navigation, dispatch}) => {
   );
 };
 
-export default connect()(HomeScreen);
+const mapStateToProps = state => {
+  console.log(state.history.historyLog);
+  return {
+    historyArr: state.history.historyLog,
+  };
+};
+
+export default connect(mapStateToProps)(HomeScreen);
