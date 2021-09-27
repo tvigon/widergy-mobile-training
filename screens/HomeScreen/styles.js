@@ -50,11 +50,16 @@ const homeStyles = StyleSheet.create({
     fontSize: 30,
   },
   screenText: {
+    flex: 3,
     fontSize: 48,
   },
   screenButtons: {
     flexDirection: 'row-reverse',
     backgroundColor: 'blue',
+  },
+  historyButt: {
+    flex: 1,
+    flexDirection: 'row',
   },
 });
 

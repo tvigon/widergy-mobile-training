@@ -23,15 +23,6 @@ import {
   View,
 } from 'react-native';
 
-let nextExpressionId = 0;
-const addExpression = text => {
-  return {
-    type: actions.SAVE_EXPRESSION,
-    id: nextExpressionId++,
-    text,
-  };
-};
-
 const HomeScreen = ({navigation, dispatch, historyArr}) => {
   const [value, setValue] = useState('');
   const [logExpression, setLogExpression] = useState();
@@ -43,18 +34,20 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
     <SafeAreaView style={homeStyles.container}>
       <View style={homeStyles.screen}>
         <Text style={homeStyles.screenText}>{value}</Text>
-        <Button
-          title="SAVE HISTORY"
-          onPress={() => {
-            dispatch(actionCreators.addExpression(logExpression, historyArr));
-          }}
-          style={[homeStyles.screenButtons]}
-        />
-        <Button
-          title="HISTORY"
-          onPress={() => navigation.navigate('History')}
-          style={[homeStyles.screenButtons]}
-        />
+        <View style={[homeStyles.historyButt]}>
+          <Button
+            title="SAVE HISTORY"
+            onPress={() => {
+              dispatch(actionCreators.addExpression(logExpression, historyArr));
+            }}
+            style={[homeStyles.screenButtons]}
+          />
+          <Button
+            title="HISTORY"
+            onPress={() => navigation.navigate('History')}
+            style={[homeStyles.screenButtons]}
+          />
+        </View>
       </View>
       <View style={[homeStyles.row, homeStyles.allButtons]}>
         <View style={[homeStyles.row, homeStyles.numButtons]}>
@@ -83,7 +76,6 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
 };
 
 const mapStateToProps = state => {
-  console.log(state.history.historyLog);
   return {
     historyArr: state.history.historyLog,
   };

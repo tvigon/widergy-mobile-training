@@ -135,7 +135,9 @@ const solveEquation = (str, firstStr, setLog) => {
       setLog(firstStr + '=' + 'Error');
       return 'Error';
     } else {
-      setLog(firstStr + '=' + str);
+      if (firstStr !== '') {
+        setLog(firstStr + '=' + str);
+      }
       return str;
     }
   }

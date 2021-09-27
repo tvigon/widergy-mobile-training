@@ -2,7 +2,7 @@ import {createReducer, completeReducer} from 'redux-recompose';
 
 import {actions} from './actions';
 
-const expression = (state, action) => {
+const eachLogReducer = (state, action) => {
   switch (action.type) {
     case '@@HISTORY/SAVE_EXPRESSION':
       return {
@@ -34,11 +34,13 @@ const reducerDescription = {
   override: {
     [actions.SAVE_EXPRESSION]: (state, action) => ({
       ...state,
-      historyLog: [...state.historyLog, expression(undefined, action)],
+      historyLog: [...state.historyLog, eachLogReducer(undefined, action)],
     }),
     [actions.EDIT_EXPRESSION]: (state, action) => ({
       ...state,
-      historyLog: state.historyLog.map(t => expression(t, action)),
+      historyLog: state.historyLog.map(logState =>
+        eachLogReducer(logState, action),
+      ),
     }),
     [actions.DELETE_EXPRESSION]: (state, action) => ({
       ...state,
@@ -46,7 +48,7 @@ const reducerDescription = {
         ...state.historyLog.slice(0, action.payload.id),
         ...state.historyLog
           .slice(action.payload.id + 1)
-          .map(t => expression(t, action)),
+          .map(logState => eachLogReducer(logState, action)),
       ],
     }),
     [actions.DELETE_ALL]: (state, action) => ({...state, historyLog: []}),

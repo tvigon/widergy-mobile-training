@@ -10,6 +10,14 @@ const historyStyles = StyleSheet.create({
     alignSelf: 'center',
     fontSize: 30,
   },
+  delButton: {
+    flex: 1,
+    backgroundColor: 'yellow',
+  },
+  row: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
 });
 
 export default historyStyles;
