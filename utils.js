@@ -24,7 +24,7 @@ const getPointDelButt = setVal => [
   },
 ];
 
-const getOpButtons = (opArr, setVal, setLog, log) => [
+const getOpButtons = (opArr, setVal, setLog) => [
   ...opArr.map(val => ({
     label: val,
     onPress: () => {
