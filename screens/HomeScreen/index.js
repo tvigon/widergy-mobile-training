@@ -38,7 +38,7 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
           <Button
             title="SAVE HISTORY"
             onPress={() => {
-              dispatch(actionCreators.addExpression(logExpression));
+              dispatch(actionCreators.saveExpression(logExpression));
             }}
             style={[homeStyles.screenButtons]}
           />
@@ -76,6 +76,7 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
 };
 
 const mapStateToProps = state => {
+  console.log(state.history.historyLog);
   return {
     historyArr: state.history.historyLog,
   };

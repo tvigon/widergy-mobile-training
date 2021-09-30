@@ -45,7 +45,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     onHistoryClick: (id, text) => {
-      dispatch(actionCreators.modifyExpression(id, text));
+      dispatch(actionCreators.editExpression(id, text));
     },
     delClick: id => {
       dispatch(actionCreators.deleteExpression(id));
