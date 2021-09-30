@@ -19,9 +19,20 @@ import {Button, SafeAreaView, Text, View} from 'react-native';
 const HomeScreen = ({navigation, dispatch, historyArr}) => {
   const [value, setValue] = useState('');
   const [logExpression, setLogExpression] = useState();
-  const OPERATION_BUTTONS = getOpButtons(OP_ARRAY, setValue, setLogExpression);
-  const NUMBER_BUTTONS = getNumButt(NUM_ARRAY, setValue, numButton);
-  const POINT_DEL_BUTT = getPointDelButt(setValue);
+  const [booleanSolve, setBooleanSolve] = useState(false);
+  const OPERATION_BUTTONS = getOpButtons(
+    OP_ARRAY,
+    setValue,
+    setBooleanSolve,
+    setLogExpression,
+  );
+  const NUMBER_BUTTONS = getNumButt(
+    NUM_ARRAY,
+    setValue,
+    setBooleanSolve,
+    numButton,
+  );
+  const POINT_DEL_BUTT = getPointDelButt(setValue, setBooleanSolve);
 
   return (
     <SafeAreaView style={homeStyles.container}>
@@ -31,7 +42,11 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
           <Button
             title="SAVE HISTORY"
             onPress={() => {
-              dispatch(actionCreators.addExpression(logExpression));
+              dispatch(
+                actionCreators.addExpression(
+                  booleanSolve ? logExpression : value,
+                ),
+              );
             }}
             style={[homeStyles.screenButtons]}
           />
@@ -69,7 +84,6 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
 };
 
 const mapStateToProps = state => {
-  console.log(state.history.historyLog);
   return {
     historyArr: state.history.historyLog,
   };

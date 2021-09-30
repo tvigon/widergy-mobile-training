@@ -1,3 +1,4 @@
+import { NOTHING } from 'immer/dist/internal';
 import {createTypes, completeTypes} from 'redux-recompose';
 import {MIN_ID, ID_RANGE} from '../../constants/constants';
 
@@ -14,6 +15,11 @@ export const actions = createTypes(completedActions, '@@HISTORY');
 
 export const actionCreators = {
   addExpression: text => {
+    if (text === '') {
+      return {
+        type: 'NOTHING',
+      };
+    }
     const id = Math.floor(Math.random() * ID_RANGE) + MIN_ID;
     return {
       type: actions.SAVE_EXPRESSION,

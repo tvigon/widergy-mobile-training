@@ -1,40 +1,46 @@
-const getNumButt = (value, setVal, operation) =>
+const getNumButt = (value, setVal, setBool, operation) =>
   value.map(val => ({
     label: val,
     onPress: () => {
+      setBool(false);
       setVal(prevValue => operation(prevValue, val));
     },
   }));
 
-const getPointDelButt = setVal => [
+const getPointDelButt = (setVal, setBool) => [
   {
     label: '.',
     onPress: () => {
       setVal(prevValue => pointButt(prevValue));
+      setBool(false);
     },
   },
   {
     label: 'DEL',
     onPress: () => {
       setVal(prevValue => delOperator(prevValue));
+      setBool(false);
     },
     onLongPress: () => {
       setVal('');
+      setBool(false);
     },
   },
 ];
 
-const getOpButtons = (opArr, setVal, setLog) => [
+const getOpButtons = (opArr, setVal, setBool, setLog) => [
   ...opArr.map(val => ({
     label: val,
     onPress: () => {
       setVal(prevValue => calcOperator(prevValue, val));
+      setBool(false);
     },
   })),
   {
     label: '=',
     onPress: () => {
       setVal(prevValue => solveEquation(prevValue, prevValue, setLog));
+      setBool(true);
     },
   },
 ];
