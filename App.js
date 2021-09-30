@@ -13,8 +13,7 @@ if (__DEV__) {
 
 import React from 'react';
 
-import {Provider, connect} from 'react-redux';
-import {createStore, combineReducers} from 'redux';
+import {Provider} from 'react-redux';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -24,14 +23,13 @@ import Reactotron from './ReactotronConfig';
 import HistoryScreen from './screens/HistoryScreen/index';
 import HomeScreen from './screens/HomeScreen/index';
 
-import calcApp from './redux/store';
+import store from './redux/store';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
-    <Provider store={createStore(calcApp,
-      Reactotron.createEnhancer(),)}>
+    <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={HomeScreen} />

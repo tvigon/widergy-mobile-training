@@ -1,4 +1,5 @@
 import {createTypes, completeTypes} from 'redux-recompose';
+import {MIN_ID, ID_RANGE} from '../../constants/constants';
 
 const completedActions = completeTypes({
   ignoredActions: [
@@ -13,9 +14,7 @@ export const actions = createTypes(completedActions, '@@HISTORY');
 
 export const actionCreators = {
   addExpression: text => {
-    let max = 100000000000000000000;
-    let min = 1;
-    let id = Math.floor(Math.random() * (max - min + 1)) + min;
+    const id = Math.floor(Math.random() * ID_RANGE) + MIN_ID;
     return {
       type: actions.SAVE_EXPRESSION,
       payload: {text, id},

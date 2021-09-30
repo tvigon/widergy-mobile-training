@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Provider, connect} from 'react-redux';
+import {connect} from 'react-redux';
 
 import {
   numButton,
@@ -8,20 +8,13 @@ import {
   getNumButt,
 } from '../../utils';
 
-import {actions, actionCreators} from '../../redux/history/actions';
+import {actionCreators} from '../../redux/history/actions';
 
 import homeStyles from './styles';
 import MyButton from '../../components/MyButton';
 
 import {OP_ARRAY, NUM_ARRAY} from './constants';
-import {
-  Button,
-  SafeAreaView,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  View,
-} from 'react-native';
+import {Button, SafeAreaView, Text, View} from 'react-native';
 
 const HomeScreen = ({navigation, dispatch, historyArr}) => {
   const [value, setValue] = useState('');
@@ -76,6 +69,7 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
 };
 
 const mapStateToProps = state => {
+  console.log(state.history.historyLog);
   return {
     historyArr: state.history.historyLog,
   };

@@ -1,8 +1,10 @@
-import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
+import {createStore, combineReducers} from 'redux';
 import history from './history/reducer';
-
+import Reactotron from 'reactotron-react-native';
 const calcApp = combineReducers({
   history,
 });
 
-export default calcApp;
+const store = createStore(calcApp, Reactotron.createEnhancer());
+
+export default store;
