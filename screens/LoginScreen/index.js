@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-import {actions, actionCreators} from '../../redux/history/actions';
+import {actions, actionCreators} from '../../redux/auth/actions';
 
 import {Provider, connect} from 'react-redux';
 import {
@@ -13,12 +13,54 @@ import {
   View,
 } from 'react-native';
 
-const LoginScreen = ({dispatch, navigation}) => {
+const LoginScreen = ({dispatch, navigation, authh}) => {
+  const [username, setUserName] = useState('asi arranco');
+  const [password, setPassword] = useState('asi tambien');
+  let userData = {email: '', password: ''};
   return (
     <View style={{alignItems: 'center', justifyContent: 'center'}}>
-      <Button title="LOGIN" onPress={() => navigation.navigate('Home')} />
+      <Button title="home" onPress={() => navigation.navigate('Home')} />
+      <TextInput
+        key={'hola'}
+        style={{}}
+        onChangeText={text => setUserName(text)}
+        value={username}
+      />
+      <TextInput
+        key={'chau'}
+        style={{}}
+        onChangeText={text => setPassword(text)}
+        value={password}
+      />
+      <View style={{flexDirection: 'row'}}>
+        <Button
+          title="CREATE"
+          onPress={() => {
+            userData.email = username;
+            userData.password = password;
+            console.log(userData);
+            dispatch(actionCreators.createUser(navigation, userData));
+          }}
+        />
+        <Button
+          title="LOGIN"
+          onPress={() => {
+            userData.email = username;
+            userData.password = password;
+            console.log(userData);
+            dispatch(actionCreators.loginUser(navigation, userData));
+          }}
+        />
+      </View>
     </View>
   );
 };
 
-export default connect()(LoginScreen);
+const mapStateToProps = state => {
+  console.log(state.auth);
+  return {
+    authh: state.auth,
+  };
+};
+
+export default connect(mapStateToProps)(LoginScreen);
