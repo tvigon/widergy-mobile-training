@@ -38,7 +38,6 @@ const LoginScreen = ({dispatch, navigation, authh}) => {
           onPress={() => {
             userData.email = username;
             userData.password = password;
-            console.log(userData);
             dispatch(actionCreators.createUser(navigation, userData));
           }}
         />
@@ -47,7 +46,6 @@ const LoginScreen = ({dispatch, navigation, authh}) => {
           onPress={() => {
             userData.email = username;
             userData.password = password;
-            console.log(userData);
             dispatch(actionCreators.loginUser(navigation, userData));
           }}
         />
