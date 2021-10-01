@@ -37,10 +37,10 @@ const privateActionCreators = {
       payload: error,
     };
   },
-  saveExpressionSuccess(data) {
+  saveExpressionSuccess(data, text, id) {
     return {
       type: actions.SAVE_EXPRESSION_SUCCESS,
-      payload: data,
+      payload: {data: data, id: id, text: text},
     };
   },
   saveExpressionFailure(error) {
@@ -49,10 +49,10 @@ const privateActionCreators = {
       payload: error,
     };
   },
-  editExpressionSuccess(data) {
+  editExpressionSuccess(data, id, text) {
     return {
       type: actions.EDIT_EXPRESSION_SUCCESS,
-      payload: data,
+      payload: {data: data, id: id, text: text},
     };
   },
   editExpressionFailure(error) {
@@ -61,10 +61,10 @@ const privateActionCreators = {
       payload: error,
     };
   },
-  deleteExpressionSuccess(data) {
+  deleteExpressionSuccess(data, id) {
     return {
       type: actions.DELETE_EXPRESSION_SUCCESS,
-      payload: data,
+      payload: {data: data, id: id},
     };
   },
   deleteExpressionFailure(error) {
@@ -88,21 +88,19 @@ const privateActionCreators = {
 };
 
 export const actionCreators = {
-  /*saveExpression: text => async dispatch => {
+  /*
+  saveExpression: text => async dispatch => {
     let max = 100000000000000000000;
     let min = 1;
     let id = Math.floor(Math.random() * (max - min + 1)) + min;
-    dispatch({type: actions.SAVE_EXPRESSION, payload: {text, id}});
+    dispatch({type: actions.SAVE_EXPRESSION});
+    //revisar la linea de abajo
     const response = await api.get('/questions');
-    if (response.error) {
-      dispatch(
-        privateActionCreators.saveExpressionFailure(response.data.error),
-      );
+    if (response.ok) {
+      dispatch(privateActionCreators.saveExpressionSuccess(response.data, text, id));
     } else {
       dispatch(
-        privateActionCreators.saveExpressionSuccess(
-          response.data[0].choices[1].choice,
-        ),
+        privateActionCreators.saveExpressionFailure(response.data.error),
       );
     }
   },
@@ -118,14 +116,17 @@ export const actionCreators = {
   },
   /*
   modifyExpression: (id, text) => async dispatch => {
-    dispatch({type: actions.EDIT_EXPRESSION, payload: {id, text}});
+    dispatch({type: actions.EDIT_EXPRESSION});
+    //revisar linea
     const response = await api.get('/calc/expressions');
-    if (response.error) {
+    if (response.ok) {
+      dispatch(
+        privateActionCreators.editExpressionSuccess(response.data, id, text),
+      );
+    } else {
       dispatch(
         privateActionCreators.editExpressionFailure(response.data.error),
       );
-    } else {
-      dispatch(privateActionCreators.editExpressionSuccess(response.data.data));
     }
   },
   */
@@ -137,19 +138,18 @@ export const actionCreators = {
   },
   /*
   deleteExpression: id => async dispatch => {
-    dispatch({type: actions.EDIT_EXPRESSION, payload: {id}});
+    dispatch({type: actions.DELETE_EXPRESSION});
     const response = await api.get('/calc/expressions');
-    if (response.error) {
+    if (response.ok) {
       dispatch(
-        privateActionCreators.deleteExpressionFailure(response.data.error),
+        privateActionCreators.deleteExpressionSuccess(response.data, id),
       );
     } else {
       dispatch(
-        privateActionCreators.deleteExpressionSuccess(response.data.data),
+        privateActionCreators.deleteExpressionFailure(response.data.error),
       );
     }
-  },
-  */
+  },*/
   deleteExpression: id => {
     return {
       type: actions.DELETE_EXPRESSION,
@@ -158,12 +158,12 @@ export const actionCreators = {
   },
   /*
   deleteAllExpressions: () => async dispatch => {
-    dispatch({type: actions.EDIT_EXPRESSION});
+    dispatch({type: actions.DELETE_ALL});
     const response = await api.get('/calc/expressions');
-    if (response.error) {
-      dispatch(privateActionCreators.deleteAllFailure(response.data.error));
+    if (response.ok) {
+      dispatch(privateActionCreators.deleteAllSuccess(response.data));
     } else {
-      dispatch(privateActionCreators.deleteAllSuccess(response.data.data));
+      dispatch(privateActionCreators.deleteAllFailure(response.data.error));
     }
   },
   */
@@ -175,15 +175,15 @@ export const actionCreators = {
   getExpressions: () => async dispatch => {
     dispatch({type: actions.GET_EXPRESSIONS});
     const response = await api.get('/questions');
-    if (response.error) {
-      dispatch(
-        privateActionCreators.getExpressionsFailure(response.data.error),
-      );
-    } else {
+    if (response.ok) {
       dispatch(
         privateActionCreators.getExpressionsSuccess(
           response.data[0].choices[1].choice,
         ),
+      );
+    } else {
+      dispatch(
+        privateActionCreators.getExpressionsFailure(response.data.error),
       );
     }
   },
