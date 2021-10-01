@@ -58,7 +58,7 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
             title="SAVE HISTORY"
             onPress={() => {
               dispatch(
-                actionCreators.addExpression(
+                actionCreators.saveExpression(
                   booleanSolve ? logExpression : value,
                 ),
               );
