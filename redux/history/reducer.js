@@ -73,13 +73,15 @@ const reducerDescription = {
       saveExpression: action.payload.data,
       historyLog: [...state.historyLog, eachLogReducer(undefined, action)],
     }),
+    /*
     [actions.EDIT_EXPRESSION]: (state, action) => ({
       ...state,
       historyLog: state.historyLog.map(logState =>
         eachLogReducer(logState, action),
       ),
     }),
-    /*
+    */
+    
     [actions.EDIT_EXPRESSION]: (state, action) => ({
       ...state,
       editExpressionLoading: true,
@@ -100,7 +102,8 @@ const reducerDescription = {
         eachLogReducer(logState, action),
       ),
     }),
-    */
+    
+    /*
     [actions.DELETE_EXPRESSION]: (state, action) => {
       let deletedIndex = state.historyLog
         .map(element => {
@@ -118,7 +121,7 @@ const reducerDescription = {
         ],
       };
     },
-    /*
+    */
     [actions.DELETE_EXPRESSION]: (state, action) => ({
       ...state,
       deleteExpressionLoading: true,
@@ -146,13 +149,13 @@ const reducerDescription = {
           ...state.historyLog.slice(deletedIndex + 1),
         ],
       };
-    },*/
-    [actions.DELETE_ALL]: (state, action) => ({...state, historyLog: []}),
-    /*[actions.DELETE_ALL]: (state, action) => ({
+    },
+    /*[actions.DELETE_ALL]: (state, action) => ({...state, historyLog: []}),*/
+    [actions.DELETE_ALL]: (state, action) => ({
       ...state,
       deleteAllLoading: true,
       deleteAllError: false,
-    }),*/
+    }),
     [actions.DELETE_ALL_FAILURE]: (state, action) => ({
       ...state,
       deleteAllLoading: false,
@@ -163,9 +166,7 @@ const reducerDescription = {
       ...state,
       deleteAllLoading: false,
       deleteAllError: false,
-      //aca asumo q me avisa que logro eliminar.
-      deleteAll: action.payload,
-      //hacer algo con el historyLog
+      deleteAll: action.payload.message,
       historyLog: [],
     }),
     [actions.GET_EXPRESSIONS]: (state, action) => ({
@@ -179,19 +180,19 @@ const reducerDescription = {
       expressionsError: true,
       expressions: action.payload,
     }),
-    [actions.GET_EXPRESSIONS_SUCCESS]: (state, action) => {
-      let tempLog = [];
-      action.payload.forEach(element =>
-        tempLog.push({id: element.id, text: element.expression}),
-      );
-      return {
-        ...state,
-        expressionsLoading: false,
-        expressionsError: false,
-        expressions: action.payload,
-        historyLog: [...state.historyLog, ...tempLog],
-      };
-    },
+    [actions.GET_EXPRESSIONS_SUCCESS]: (state, action) => ({
+      ...state,
+      expressionsLoading: false,
+      expressionsError: false,
+      expressions: action.payload,
+      historyLog: [
+        ...state.historyLog,
+        ...action.payload.map(element => ({
+          id: element.id,
+          text: element.expression,
+        })),
+      ],
+    }),
   },
 };
 export default createReducer(initialState, completeReducer(reducerDescription));
