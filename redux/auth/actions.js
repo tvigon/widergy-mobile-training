@@ -1,14 +1,6 @@
 import {createTypes, completeTypes} from 'redux-recompose';
 
-// showLastCommitMessageForThisLibrary.js
-import {create} from 'apisauce';
-
-// define the api
-const api = create({
-  baseURL: 'https://widergy-training-api.herokuapp.com',
-  headers: {Accept: ['application/json', 'charset=utf-8']},
-  timeout: 60000,
-});
+import api from '../../config/api';
 
 const completedActions = completeTypes({
   primaryActions: ['CREATE_USER', 'LOGIN_USER', 'LOGOUT_USER'],
@@ -55,7 +47,7 @@ const privateActionCreators = {
   },
 };
 
-export const actionCreators = {
+export const actionCreatorsAuth = {
   createUser: (navigation, userData) => async dispatch => {
     dispatch({type: actions.CREATE_USER, payload: userData});
     const response = await api.post('/auth/create', userData);
@@ -70,6 +62,7 @@ export const actionCreators = {
   loginUser: (navigation, userData) => async dispatch => {
     console.log('aca si no? ' + userData.email);
     dispatch({type: actions.LOGIN_USER, payload: userData});
+    console.log('user dataaaa ' + userData.email + ' ' + userData.password);
     const response = await api.post('/auth/login', userData);
     console.log('el real response ' + response.data);
     if (response.ok) {
@@ -78,18 +71,18 @@ export const actionCreators = {
       api.setHeader('Authorization', response.data.token);
       navigation.navigate('Home');
     } else {
-      console.log('response error ' + response.data);
+      console.log('response error ' + response.data.error);
       dispatch(privateActionCreators.loginUserFailure(response.data));
     }
   },
   logoutUser: navigation => async dispatch => {
     dispatch({type: actions.LOGIN_USER});
     const response = await api.get('/auth/logout');
-    if (response.error) {
-      dispatch(privateActionCreators.logoutUserFailure(response.data.error));
-    } else {
+    if (response.ok) {
       dispatch(privateActionCreators.logoutUserSuccess(response.data.message));
       navigation.navigate('Login');
+    } else {
+      dispatch(privateActionCreators.logoutUserFailure(response.data.error));
     }
   },
 };

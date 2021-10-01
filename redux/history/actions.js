@@ -1,16 +1,6 @@
 import {createTypes, completeTypes} from 'redux-recompose';
 
-// showLastCommitMessageForThisLibrary.js
-import {create} from 'apisauce';
-
-// define the api
-const api = create({
-  //baseURL: 'https://widergy-training-api.herokuapp.com',
-  baseURL:
-    'https://private-anon-4d276a4a86-widergytrainingfrontend.apiary-mock.com',
-  headers: {Accept: ['application/json', 'charset=utf-8']},
-  timeout: 60000,
-});
+import api from '../../config/api';
 
 const completedActions = completeTypes({
   primaryActions: [
@@ -88,23 +78,32 @@ const privateActionCreators = {
 };
 
 export const actionCreators = {
-  /*
   saveExpression: text => async dispatch => {
     let max = 100000000000000000000;
     let min = 1;
     let id = Math.floor(Math.random() * (max - min + 1)) + min;
     dispatch({type: actions.SAVE_EXPRESSION});
     //revisar la linea de abajo
-    const response = await api.get('/questions');
+    console.log('text ' + text + typeof text);
+    let expressionToSave = {expressions: []};
+    expressionToSave.expressions.push(text);
+    console.log(expressionToSave);
+    const response = await api.post('/calc/expressions', {
+      expressions: ['12 + 5', '5 * 11'],
+    });
     if (response.ok) {
-      dispatch(privateActionCreators.saveExpressionSuccess(response.data, text, id));
-    } else {
       dispatch(
-        privateActionCreators.saveExpressionFailure(response.data.error),
+        privateActionCreators.saveExpressionSuccess(
+          response.data.message,
+          text,
+          id,
+        ),
       );
+    } else {
+      dispatch(privateActionCreators.saveExpressionFailure(response.data));
     }
   },
-  */
+  /*
   saveExpression: text => {
     let max = 100000000000000000000;
     let min = 1;
@@ -114,6 +113,7 @@ export const actionCreators = {
       payload: {text, id},
     };
   },
+  */
   /*
   modifyExpression: (id, text) => async dispatch => {
     dispatch({type: actions.EDIT_EXPRESSION});
@@ -174,13 +174,9 @@ export const actionCreators = {
   },
   getExpressions: () => async dispatch => {
     dispatch({type: actions.GET_EXPRESSIONS});
-    const response = await api.get('/questions');
+    const response = await api.get('/calc/expressions');
     if (response.ok) {
-      dispatch(
-        privateActionCreators.getExpressionsSuccess(
-          response.data[0].choices[1].choice,
-        ),
-      );
+      dispatch(privateActionCreators.getExpressionsSuccess(response.data.data));
     } else {
       dispatch(
         privateActionCreators.getExpressionsFailure(response.data.error),

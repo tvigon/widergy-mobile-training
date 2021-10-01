@@ -37,6 +37,7 @@ const History = ({history, onHistoryClick, delClick}) => (
 );
 
 const mapStateToProps = state => {
+  console.log('HITORY LOG. ' + state.history.historyLog);
   return {
     history: state.history.historyLog,
   };

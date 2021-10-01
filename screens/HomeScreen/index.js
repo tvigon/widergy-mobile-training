@@ -9,6 +9,7 @@ import {
 } from '../../utils';
 
 import {actions, actionCreators} from '../../redux/history/actions';
+import { actionCreatorsAuth } from '../../redux/auth/actions';
 
 import homeStyles from './styles';
 import MyButton from '../../components/MyButton';
@@ -35,6 +36,20 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
       <View style={homeStyles.screen}>
         <Text style={homeStyles.screenText}>{value}</Text>
         <View style={[homeStyles.historyButt]}>
+          <Button
+            title="LOGOUT"
+            onPress={() => {
+              dispatch(actionCreatorsAuth.logoutUser(navigation));
+            }}
+            style={[homeStyles.screenButtons]}
+          />
+          <Button
+            title="GET HISTORY"
+            onPress={() => {
+              dispatch(actionCreators.getExpressions());
+            }}
+            style={[homeStyles.screenButtons]}
+          />
           <Button
             title="SAVE HISTORY"
             onPress={() => {
@@ -76,7 +91,7 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
 };
 
 const mapStateToProps = state => {
-  console.log(state.history.historyLog);
+  console.log(state.history);
   return {
     historyArr: state.history.historyLog,
   };

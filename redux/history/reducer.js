@@ -4,12 +4,12 @@ import {actions} from './actions';
 
 const eachLogReducer = (state, action) => {
   switch (action.type) {
-    case '@@HISTORY/SAVE_EXPRESSION':
+    case '@@HISTORY/SAVE_EXPRESSION_SUCCESS':
       return {
         id: action.payload.id,
         text: action.payload.text,
       };
-    case '@@HISTORY/EDIT_EXPRESSION':
+    case '@@HISTORY/EDIT_EXPRESSION_SUCCESS':
       if (state.id !== action.payload.id) {
         return state;
       }
@@ -50,11 +50,11 @@ const reducerDescription = {
     actions.GET_EXPRESSIONS,
   ],
   override: {
-    [actions.SAVE_EXPRESSION]: (state, action) => ({
+    /*[actions.SAVE_EXPRESSION]: (state, action) => ({
       ...state,
       historyLog: [...state.historyLog, eachLogReducer(undefined, action)],
     }),
-    /*
+    */
     [actions.SAVE_EXPRESSION]: (state, action) => ({
       ...state,
       saveExpressionLoading: true,
@@ -64,16 +64,15 @@ const reducerDescription = {
       ...state,
       saveExpressionLoading: false,
       saveExpressionError: true,
-      saveExpression: action.payload,
+      saveExpression: action.payload.error,
     }),
     [actions.SAVE_EXPRESSION_SUCCESS]: (state, action) => ({
       ...state,
       saveExpressionLoading: false,
       saveExpressionError: false,
-      saveExpression: action.payload,
+      saveExpression: action.payload.data,
       historyLog: [...state.historyLog, eachLogReducer(undefined, action)],
     }),
-    */
     [actions.EDIT_EXPRESSION]: (state, action) => ({
       ...state,
       historyLog: state.historyLog.map(logState =>
@@ -180,13 +179,19 @@ const reducerDescription = {
       expressionsError: true,
       expressions: action.payload,
     }),
-    [actions.GET_EXPRESSIONS_SUCCESS]: (state, action) => ({
-      ...state,
-      expressionsLoading: false,
-      expressionsError: false,
-      expressions: action.payload,
-      //hacer algo con el historyLog
-    }),
+    [actions.GET_EXPRESSIONS_SUCCESS]: (state, action) => {
+      let tempLog = [];
+      action.payload.forEach(element =>
+        tempLog.push({id: element.id, text: element.expression}),
+      );
+      return {
+        ...state,
+        expressionsLoading: false,
+        expressionsError: false,
+        expressions: action.payload,
+        historyLog: [...state.historyLog, ...tempLog],
+      };
+    },
   },
 };
 export default createReducer(initialState, completeReducer(reducerDescription));

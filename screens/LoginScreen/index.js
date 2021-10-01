@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-import {actions, actionCreators} from '../../redux/auth/actions';
+import {actions, actionCreatorsAuth} from '../../redux/auth/actions';
 
 import {Provider, connect} from 'react-redux';
 import {
@@ -14,8 +14,8 @@ import {
 } from 'react-native';
 
 const LoginScreen = ({dispatch, navigation, authh}) => {
-  const [username, setUserName] = useState('asi arranco');
-  const [password, setPassword] = useState('asi tambien');
+  const [username, setUserName] = useState('vaigon@hotmail.com');
+  const [password, setPassword] = useState('estoesboca');
   let userData = {email: '', password: ''};
   return (
     <View style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -38,7 +38,8 @@ const LoginScreen = ({dispatch, navigation, authh}) => {
           onPress={() => {
             userData.email = username;
             userData.password = password;
-            dispatch(actionCreators.createUser(navigation, userData));
+            console.log(userData);
+            dispatch(actionCreatorsAuth.createUser(navigation, userData));
           }}
         />
         <Button
@@ -46,7 +47,7 @@ const LoginScreen = ({dispatch, navigation, authh}) => {
           onPress={() => {
             userData.email = username;
             userData.password = password;
-            dispatch(actionCreators.loginUser(navigation, userData));
+            dispatch(actionCreatorsAuth.loginUser(navigation, userData));
           }}
         />
       </View>
@@ -55,7 +56,6 @@ const LoginScreen = ({dispatch, navigation, authh}) => {
 };
 
 const mapStateToProps = state => {
-  console.log(state.auth);
   return {
     authh: state.auth,
   };
