@@ -1,4 +1,6 @@
+import { NOTHING } from 'immer/dist/internal';
 import {createTypes, completeTypes} from 'redux-recompose';
+import {MIN_ID, ID_RANGE} from '../../constants/constants';
 
 import api from '../../config/api';
 
@@ -79,18 +81,19 @@ const privateActionCreators = {
 
 export const actionCreators = {
   saveExpression: text => async dispatch => {
-    let max = 100000000000000000000;
-    let min = 1;
-    let id = Math.floor(Math.random() * (max - min + 1)) + min;
+    if (text === '') {
+      return {
+        type: 'NOTHING',
+      };
+    }
+    const id = Math.floor(Math.random() * ID_RANGE) + MIN_ID;
     dispatch({type: actions.SAVE_EXPRESSION});
     //revisar la linea de abajo
     console.log('text ' + text + typeof text);
     let expressionToSave = {expressions: []};
     expressionToSave.expressions.push(text);
     console.log(expressionToSave);
-    const response = await api.post('/calc/expressions', {
-      expressions: ['12 + 5', '5 * 11'],
-    });
+    const response = await api.post('/calc/expressions', expressionToSave);
     if (response.ok) {
       dispatch(
         privateActionCreators.saveExpressionSuccess(

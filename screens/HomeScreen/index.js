@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Provider, connect} from 'react-redux';
+import {connect} from 'react-redux';
 
 import {
   numButton,
@@ -15,21 +15,25 @@ import homeStyles from './styles';
 import MyButton from '../../components/MyButton';
 
 import {OP_ARRAY, NUM_ARRAY} from './constants';
-import {
-  Button,
-  SafeAreaView,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  View,
-} from 'react-native';
+import {Button, SafeAreaView, Text, View} from 'react-native';
 
 const HomeScreen = ({navigation, dispatch, historyArr}) => {
   const [value, setValue] = useState('');
   const [logExpression, setLogExpression] = useState();
-  const OPERATION_BUTTONS = getOpButtons(OP_ARRAY, setValue, setLogExpression);
-  const NUMBER_BUTTONS = getNumButt(NUM_ARRAY, setValue, numButton);
-  const POINT_DEL_BUTT = getPointDelButt(setValue);
+  const [booleanSolve, setBooleanSolve] = useState(false);
+  const OPERATION_BUTTONS = getOpButtons(
+    OP_ARRAY,
+    setValue,
+    setBooleanSolve,
+    setLogExpression,
+  );
+  const NUMBER_BUTTONS = getNumButt(
+    NUM_ARRAY,
+    setValue,
+    setBooleanSolve,
+    numButton,
+  );
+  const POINT_DEL_BUTT = getPointDelButt(setValue, setBooleanSolve);
 
   return (
     <SafeAreaView style={homeStyles.container}>
@@ -53,7 +57,11 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
           <Button
             title="SAVE HISTORY"
             onPress={() => {
-              dispatch(actionCreators.saveExpression(logExpression));
+              dispatch(
+                actionCreators.addExpression(
+                  booleanSolve ? logExpression : value,
+                ),
+              );
             }}
             style={[homeStyles.screenButtons]}
           />
