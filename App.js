@@ -26,8 +26,6 @@ import LoginScreen from './screens/LoginScreen';
 
 import store from './redux/store';
 
-import store from './redux/store';
-
 const Stack = createNativeStackNavigator();
 
 const App = () => {
