@@ -9,7 +9,7 @@ import {
 } from '../../utils';
 
 import {actions, actionCreators} from '../../redux/history/actions';
-import { actionCreatorsAuth } from '../../redux/auth/actions';
+import {actionCreatorsAuth} from '../../redux/auth/actions';
 
 import homeStyles from './styles';
 import MyButton from '../../components/MyButton';

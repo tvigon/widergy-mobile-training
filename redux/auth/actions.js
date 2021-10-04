@@ -60,18 +60,13 @@ export const actionCreatorsAuth = {
     }
   },
   loginUser: (navigation, userData) => async dispatch => {
-    console.log('aca si no? ' + userData.email);
     dispatch({type: actions.LOGIN_USER, payload: userData});
-    console.log('user dataaaa ' + userData.email + ' ' + userData.password);
     const response = await api.post('/auth/login', userData);
-    console.log('el real response ' + response.data);
     if (response.ok) {
-      console.log('response ok ' + response.ok);
       dispatch(privateActionCreators.loginUserSuccess(response.data.token));
       api.setHeader('Authorization', response.data.token);
       navigation.navigate('Home');
     } else {
-      console.log('response error ' + response.data.error);
       dispatch(privateActionCreators.loginUserFailure(response.data));
     }
   },

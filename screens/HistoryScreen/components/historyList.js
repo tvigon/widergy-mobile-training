@@ -26,5 +26,6 @@ export const HistoryList = ({dispatch, historyLog}) => (
         />
       </View>
     ))}
+    {historyLog.slice(0, 5).forEach(item => console.log(item.id))}
   </ScrollView>
 );

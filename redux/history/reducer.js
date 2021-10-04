@@ -70,7 +70,7 @@ const reducerDescription = {
       ...state,
       saveExpressionLoading: false,
       saveExpressionError: false,
-      saveExpression: action.payload.data,
+      saveExpression: action.payload,
       historyLog: [...state.historyLog, eachLogReducer(undefined, action)],
     }),
     /*
@@ -81,7 +81,6 @@ const reducerDescription = {
       ),
     }),
     */
-    
     [actions.EDIT_EXPRESSION]: (state, action) => ({
       ...state,
       editExpressionLoading: true,
@@ -97,7 +96,7 @@ const reducerDescription = {
       ...state,
       editExpressionLoading: false,
       editExpressionError: false,
-      editExpression: action.payload,
+      editExpression: action.payload.data.message,
       historyLog: state.historyLog.map(logState =>
         eachLogReducer(logState, action),
       ),
@@ -186,8 +185,7 @@ const reducerDescription = {
       expressionsError: false,
       expressions: action.payload,
       historyLog: [
-        ...state.historyLog,
-        ...action.payload.map(element => ({
+        ...action.payload.slice(0, 8).map(element => ({
           id: element.id,
           text: element.expression,
         })),

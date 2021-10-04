@@ -14,20 +14,20 @@ import {
 } from 'react-native';
 
 const LoginScreen = ({dispatch, navigation, authh}) => {
-  const [username, setUserName] = useState('vaigon@hotmail.com');
-  const [password, setPassword] = useState('estoesboca');
+  const [username, setUserName] = useState('vaigon1@hotmail.com');
+  const [password, setPassword] = useState('widergy');
   let userData = {email: '', password: ''};
   return (
     <View style={{alignItems: 'center', justifyContent: 'center'}}>
       <Button title="home" onPress={() => navigation.navigate('Home')} />
       <TextInput
-        key={'hola'}
+        key={'user'}
         style={{}}
         onChangeText={text => setUserName(text)}
         value={username}
       />
       <TextInput
-        key={'chau'}
+        key={'pass'}
         style={{}}
         onChangeText={text => setPassword(text)}
         value={password}
@@ -38,7 +38,6 @@ const LoginScreen = ({dispatch, navigation, authh}) => {
           onPress={() => {
             userData.email = username;
             userData.password = password;
-            console.log(userData);
             dispatch(actionCreatorsAuth.createUser(navigation, userData));
           }}
         />

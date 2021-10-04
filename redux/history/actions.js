@@ -107,14 +107,14 @@ export const actionCreators = {
   },
   modifyExpression: (id, text) => async dispatch => {
     dispatch({type: actions.EDIT_EXPRESSION});
-    let expressionToEdit = {expressions: []};
-    expressionToEdit.expressions.push(text);
-    console.log(expressionToEdit);
-    const response = await api.post('/calc/expressions', expressionToEdit);
+    const response = await api.put(`/calc/expressions/${id}`, {
+      expression: text,
+    });
     if (response.ok) {
       dispatch(
         privateActionCreators.editExpressionSuccess(response.data, id, text),
       );
+      //dispatch(actionCreators.getExpressions());
     } else {
       dispatch(
         privateActionCreators.editExpressionFailure(response.data.error),
@@ -131,7 +131,10 @@ export const actionCreators = {
   */
   deleteExpression: id => async dispatch => {
     dispatch({type: actions.DELETE_EXPRESSION});
-    const response = await api.delete('/calc/expressions', {expressions: id});
+    let expressionToDel = {expressions: ['2LDffwLKbAKpazgCSWER']};
+    expressionToDel.expressions.push(id);
+    console.log(expressionToDel);
+    const response = await api.delete('/calc/expressions', expressionToDel);
     if (response.ok) {
       dispatch(
         privateActionCreators.deleteExpressionSuccess(response.data, id),
@@ -170,7 +173,7 @@ export const actionCreators = {
   },*/
   getExpressions: () => async dispatch => {
     dispatch({type: actions.GET_EXPRESSIONS});
-    const response = await api.get('/calc/expressions');
+    const response = await api.get(`/calc/expressions`);
     if (response.ok) {
       dispatch(privateActionCreators.getExpressionsSuccess(response.data.data));
     } else {
