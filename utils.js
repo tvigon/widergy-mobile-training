@@ -1,40 +1,46 @@
-const getNumButt = (value, setVal, operation) =>
+const getNumButt = (value, setVal, setBool, operation) =>
   value.map(val => ({
     label: val,
     onPress: () => {
+      setBool(false);
       setVal(prevValue => operation(prevValue, val));
     },
   }));
 
-const getPointDelButt = setVal => [
+const getPointDelButt = (setVal, setBool) => [
   {
     label: '.',
     onPress: () => {
       setVal(prevValue => pointButt(prevValue));
+      setBool(false);
     },
   },
   {
     label: 'DEL',
     onPress: () => {
       setVal(prevValue => delOperator(prevValue));
+      setBool(false);
     },
     onLongPress: () => {
       setVal('');
+      setBool(false);
     },
   },
 ];
 
-const getOpButtons = (opArr, setVal, setArray, arr) => [
+const getOpButtons = (opArr, setVal, setBool, setLog) => [
   ...opArr.map(val => ({
     label: val,
     onPress: () => {
       setVal(prevValue => calcOperator(prevValue, val));
+      setBool(false);
     },
   })),
   {
     label: '=',
     onPress: () => {
-      setVal(prevValue => solveEquation(prevValue, prevValue, setArray, arr));
+      setVal(prevValue => solveEquation(prevValue, prevValue, setLog));
+      setBool(true);
     },
   },
 ];
@@ -113,7 +119,7 @@ const lessPriorityParse = str => {
   }
 };
 
-const solveEquation = (str, firstStr, setArr, arr) => {
+const solveEquation = (str, firstStr, setLog) => {
   const PARSE_MULT_DIVISION = /[-]?[.]?[0-9]*[.]?[0-9]+[/x][-]?[.]?[0-9]*[.]?[0-9]+/g;
   let firstMatch = PARSE_MULT_DIVISION.exec(str);
   const PARSE_SUM_SUBS = /[-]?[.]?[0-9]*[.]?[0-9]+[+-][-]?[.]?[0-9]*[.]?[0-9]+/g;
@@ -122,26 +128,22 @@ const solveEquation = (str, firstStr, setArr, arr) => {
     return solveEquation(
       str.replace(firstMatch[0], priorityParse(firstMatch[0])),
       firstStr,
-      setArr,
-      arr,
+      setLog,
     );
   } else if (secMatch !== null) {
     return solveEquation(
       str.replace(secMatch[0], lessPriorityParse(secMatch[0])),
       firstStr,
-      setArr,
-      arr,
+      setLog,
     );
   } else {
     if (isNaN(str) || str === 'Infinity' || str === '-Infinity') {
-      let auxArr = [...arr];
-      auxArr.unshift(firstStr + '=' + 'Error');
-      setArr(auxArr);
+      setLog(firstStr + '=' + 'Error');
       return 'Error';
     } else {
-      let auxArr = [...arr];
-      auxArr.unshift(firstStr + '=' + str);
-      setArr(auxArr);
+      if (firstStr !== '') {
+        setLog(firstStr + '=' + str);
+      }
       return str;
     }
   }

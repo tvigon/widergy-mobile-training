@@ -1,30 +1,29 @@
 import React, {useState} from 'react';
-import {
-  Button,
-  SafeAreaView,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  View,
-} from 'react-native';
+
+import {actionCreators} from '../../redux/history/actions';
+
+import {connect} from 'react-redux';
+import {Button, View} from 'react-native';
 
 import historyStyles from './styles';
+import {HistoryList} from './components/historyList';
 
-const HistoryScreen = ({route, navigation}) => {
-  const {logValue} = route.params;
-
-  const renderText = text => (
-    <Text style={[historyStyles.historyText]}>{text}</Text>
-  );
-
+const HistoryScreen = ({dispatch, historyLog}) => {
   return (
     <View style={[historyStyles.container]}>
-      <ScrollView style={historyStyles.container}>
-        {logValue.map(text => renderText(text))}
-      </ScrollView>
-      <Button title="Go back" onPress={() => navigation.goBack()} />
+      <HistoryList dispatch={dispatch} historyLog={historyLog} />
+      <Button
+        title="Delete all"
+        onPress={() => dispatch(actionCreators.deleteAllExpressions())}
+      />
     </View>
   );
 };
 
-export default HistoryScreen;
+const mapStateToProps = state => {
+  return {
+    historyLog: state.history.historyLog,
+  };
+};
+
+export default connect(mapStateToProps)(HistoryScreen);

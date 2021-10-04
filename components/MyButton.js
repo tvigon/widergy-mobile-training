@@ -2,14 +2,7 @@ import React from 'react';
 
 import homeStyles from '../screens/HomeScreen/styles';
 
-import {
-  Button,
-  SafeAreaView,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  View,
-} from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
 
 const MyButton = ({label, press, style, longPress}) => (
   <TouchableOpacity onPress={press} onLongPress={longPress} style={style}>

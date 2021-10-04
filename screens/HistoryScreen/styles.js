@@ -6,8 +6,17 @@ const historyStyles = StyleSheet.create({
     flexDirection: 'column',
   },
   historyText: {
+    flex: 5,
     alignSelf: 'center',
     fontSize: 30,
+  },
+  delButton: {
+    flex: 1,
+    backgroundColor: 'yellow',
+  },
+  row: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
 });
 
