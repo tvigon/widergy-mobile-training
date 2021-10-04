@@ -52,13 +52,6 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
             style={[homeStyles.screenButtons]}
           />
           <Button
-            title="GET HISTORY"
-            onPress={() => {
-              dispatch(actionCreators.getExpressions());
-            }}
-            style={[homeStyles.screenButtons]}
-          />
-          <Button
             title="SAVE HISTORY"
             onPress={() => {
               dispatch(
