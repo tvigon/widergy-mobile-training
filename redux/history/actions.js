@@ -106,6 +106,7 @@ export const actionCreators = {
     }
   },
   modifyExpression: (id, text) => async dispatch => {
+    console.log('TESTO: ' + text);
     dispatch({type: actions.EDIT_EXPRESSION});
     const response = await api.put(`/calc/expressions/${id}`, {
       expression: text,
@@ -131,10 +132,11 @@ export const actionCreators = {
   */
   deleteExpression: id => async dispatch => {
     dispatch({type: actions.DELETE_EXPRESSION});
-    let expressionToDel = {expressions: ['2LDffwLKbAKpazgCSWER']};
-    expressionToDel.expressions.push(id);
-    console.log(expressionToDel);
-    const response = await api.delete('/calc/expressions', expressionToDel);
+    const response = await api.delete(
+      '/calc/expressions',
+      {},
+      {data: {expressions: [id]}},
+    );
     if (response.ok) {
       dispatch(
         privateActionCreators.deleteExpressionSuccess(response.data, id),
@@ -154,10 +156,11 @@ export const actionCreators = {
   },*/
   deleteAllExpressions: idArr => async dispatch => {
     dispatch({type: actions.DELETE_ALL});
-    let expressionToDel = {expressions: []};
-    expressionToDel.expressions.push(...idArr);
-    console.log(expressionToDel);
-    const response = await api.delete('/calc/expressions', expressionToDel);
+    const response = await api.delete(
+      '/calc/expressions',
+      {},
+      {data: {expressions: [...idArr]}},
+    );
     if (response.ok) {
       dispatch(privateActionCreators.deleteAllSuccess(response.data));
     } else {

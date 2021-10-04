@@ -14,8 +14,8 @@ import {
 } from 'react-native';
 
 const LoginScreen = ({dispatch, navigation, authh}) => {
-  const [username, setUserName] = useState('vaigon1@hotmail.com');
-  const [password, setPassword] = useState('widergy');
+  const [username, setUserName] = useState('vaigon@hotmail.com');
+  const [password, setPassword] = useState('estoesboca');
   let userData = {email: '', password: ''};
   return (
     <View style={{alignItems: 'center', justifyContent: 'center'}}>

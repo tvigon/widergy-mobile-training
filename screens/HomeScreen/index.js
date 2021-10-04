@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 
 import {
@@ -34,6 +34,11 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
     numButton,
   );
   const POINT_DEL_BUTT = getPointDelButt(setValue, setBooleanSolve);
+
+  useEffect(() => {
+    console.log('in');
+    dispatch(actionCreators.getExpressions());
+  }, [dispatch]);
 
   return (
     <SafeAreaView style={homeStyles.container}>

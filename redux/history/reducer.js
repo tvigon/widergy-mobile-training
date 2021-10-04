@@ -185,7 +185,7 @@ const reducerDescription = {
       expressionsError: false,
       expressions: action.payload,
       historyLog: [
-        ...action.payload.slice(0, 8).map(element => ({
+        ...action.payload.map(element => ({
           id: element.id,
           text: element.expression,
         })),
