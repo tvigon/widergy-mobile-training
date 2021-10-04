@@ -1,4 +1,3 @@
-import { NOTHING } from 'immer/dist/internal';
 import {createTypes, completeTypes} from 'redux-recompose';
 import {MIN_ID, ID_RANGE} from '../../constants/constants';
 
@@ -88,11 +87,9 @@ export const actionCreators = {
     }
     const id = (Math.floor(Math.random() * ID_RANGE) + MIN_ID).toString();
     dispatch({type: actions.SAVE_EXPRESSION});
-    let expressionToSave = {expressions: []};
-    expressionToSave.expressions.push(text);
-    console.log(expressionToSave);
-    //hacer que reciba expresions to save la funcion save expression
-    const response = await api.post('/calc/expressions', expressionToSave);
+    const response = await api.post('/calc/expressions', {
+      expressions: [`${text}`],
+    });
     if (response.ok) {
       dispatch(
         privateActionCreators.saveExpressionSuccess(
@@ -101,12 +98,12 @@ export const actionCreators = {
           id,
         ),
       );
+      dispatch(actionCreators.getExpressions());
     } else {
       dispatch(privateActionCreators.saveExpressionFailure(response.data));
     }
   },
   modifyExpression: (id, text) => async dispatch => {
-    console.log('TESTO: ' + text);
     dispatch({type: actions.EDIT_EXPRESSION});
     const response = await api.put(`/calc/expressions/${id}`, {
       expression: text,
@@ -115,21 +112,12 @@ export const actionCreators = {
       dispatch(
         privateActionCreators.editExpressionSuccess(response.data, id, text),
       );
-      //dispatch(actionCreators.getExpressions());
     } else {
       dispatch(
         privateActionCreators.editExpressionFailure(response.data.error),
       );
     }
   },
-  /*
-  modifyExpression: (id, text) => {
-    return {
-      type: actions.EDIT_EXPRESSION,
-      payload: {id, text},
-    };
-  },
-  */
   deleteExpression: id => async dispatch => {
     dispatch({type: actions.DELETE_EXPRESSION});
     const response = await api.delete(
@@ -147,13 +135,6 @@ export const actionCreators = {
       );
     }
   },
-  /*
-  deleteExpression: id => {
-    return {
-      type: actions.DELETE_EXPRESSION,
-      payload: {id},
-    };
-  },*/
   deleteAllExpressions: idArr => async dispatch => {
     dispatch({type: actions.DELETE_ALL});
     const response = await api.delete(
@@ -167,13 +148,6 @@ export const actionCreators = {
       dispatch(privateActionCreators.deleteAllFailure(response.data.error));
     }
   },
-  /*
-  deleteAllExpressions: idArr => {
-    console.log('idArr ' + idArr);
-    return {
-      type: actions.DELETE_ALL,
-    };
-  },*/
   getExpressions: () => async dispatch => {
     dispatch({type: actions.GET_EXPRESSIONS});
     const response = await api.get(`/calc/expressions`);

@@ -50,11 +50,6 @@ const reducerDescription = {
     actions.GET_EXPRESSIONS,
   ],
   override: {
-    /*[actions.SAVE_EXPRESSION]: (state, action) => ({
-      ...state,
-      historyLog: [...state.historyLog, eachLogReducer(undefined, action)],
-    }),
-    */
     [actions.SAVE_EXPRESSION]: (state, action) => ({
       ...state,
       saveExpressionLoading: true,
@@ -73,14 +68,6 @@ const reducerDescription = {
       saveExpression: action.payload,
       historyLog: [...state.historyLog, eachLogReducer(undefined, action)],
     }),
-    /*
-    [actions.EDIT_EXPRESSION]: (state, action) => ({
-      ...state,
-      historyLog: state.historyLog.map(logState =>
-        eachLogReducer(logState, action),
-      ),
-    }),
-    */
     [actions.EDIT_EXPRESSION]: (state, action) => ({
       ...state,
       editExpressionLoading: true,
@@ -101,26 +88,6 @@ const reducerDescription = {
         eachLogReducer(logState, action),
       ),
     }),
-    
-    /*
-    [actions.DELETE_EXPRESSION]: (state, action) => {
-      let deletedIndex = state.historyLog
-        .map(element => {
-          return element.id;
-        })
-        .indexOf(action.payload.id);
-      return {
-        ...state,
-        deleteExpressionLoading: false,
-        deleteExpressionError: false,
-        deleteExpression: action.payload,
-        historyLog: [
-          ...state.historyLog.slice(0, deletedIndex),
-          ...state.historyLog.slice(deletedIndex + 1),
-        ],
-      };
-    },
-    */
     [actions.DELETE_EXPRESSION]: (state, action) => ({
       ...state,
       deleteExpressionLoading: true,
@@ -149,7 +116,6 @@ const reducerDescription = {
         ],
       };
     },
-    /*[actions.DELETE_ALL]: (state, action) => ({...state, historyLog: []}),*/
     [actions.DELETE_ALL]: (state, action) => ({
       ...state,
       deleteAllLoading: true,

@@ -36,7 +36,6 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
   const POINT_DEL_BUTT = getPointDelButt(setValue, setBooleanSolve);
 
   useEffect(() => {
-    console.log('in');
     dispatch(actionCreators.getExpressions());
   }, [dispatch]);
 
@@ -104,7 +103,6 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
 };
 
 const mapStateToProps = state => {
-  console.log(state.history);
   return {
     historyArr: state.history.historyLog,
   };
