@@ -52,10 +52,8 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
             style={[homeStyles.screenButtons]}
           />
           <Button
-            title="GET HISTORY"
-            onPress={() => {
-              dispatch(actionCreators.getExpressions());
-            }}
+            title="POLL"
+            onPress={() => navigation.navigate('Poll')}
             style={[homeStyles.screenButtons]}
           />
           <Button

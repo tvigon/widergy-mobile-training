@@ -1,14 +1,18 @@
 import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
+
+import {reducer as formReducer} from 'redux-form';
 import history from './history/reducer';
 import auth from './auth/reducer';
 import thunk from 'redux-thunk';
-
+import formReduc from './form/reducer';
 //import Reactotron from '../ReactotronConfig';
 import Reactotron from 'reactotron-react-native';
 
 const calcApp = combineReducers({
   history,
   auth,
+  form: formReducer,
+  formReduc,
 });
 
 const middlewares = [];

@@ -23,6 +23,7 @@ import Reactotron from './ReactotronConfig';
 import HistoryScreen from './screens/HistoryScreen/index';
 import HomeScreen from './screens/HomeScreen/index';
 import LoginScreen from './screens/LoginScreen';
+import PollScreen from './screens/PollScreen';
 
 import store from './redux/store';
 
@@ -36,6 +37,7 @@ const App = () => {
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="History" component={HistoryScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Poll" component={PollScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
