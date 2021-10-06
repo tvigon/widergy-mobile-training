@@ -13,6 +13,8 @@ import {
 import {actionCreatorsForm} from '../../redux/form/actions';
 import formStyles from './styles';
 
+import api from '../../config/api';
+
 import {Field, reduxForm, formValueSelector} from 'redux-form'; // <---- LOOK HERE
 
 const validate = values => {
@@ -20,14 +22,10 @@ const validate = values => {
 
   if (!values.first_name) {
     errors.first_name = 'First name is required.';
-  } else if (!/^([^0-9]*)$/.test(values.first_name)) {
-    errors.first_name = 'Your name should not have numbers';
   }
 
   if (!values.last_name) {
     errors.last_name = 'Last name is required.';
-  } else if (!/^([^0-9]*)$/.test(values.last_name)) {
-    errors.last_name = 'Your last name should not have numbers';
   }
 
   if (!values.app_review) {
@@ -38,15 +36,35 @@ const validate = values => {
 
   if (!values.phone) {
     errors.phone = 'Phone is required';
-  } else if (!/^([1-9][0-9]{9})$/i.test(values.phone)) {
+  } else if (!/^([0-9]{10})$/i.test(values.phone)) {
     errors.phone = 'Phone number must have 10 digits';
   }
-
   return errors;
 };
 
-const submit = values => {
-  console.log('submitting form', values);
+const correctName = value => {
+  if (!value) {
+    return value;
+  }
+  return value.replace(/[\d\W]/g, '');
+};
+
+const numberOnly = value => {
+  if (!value) {
+    return value;
+  }
+  return value.replace(/[^\d]/g, '');
+};
+
+const submit = async values => {
+  const response = await api.post('/form_responses', {
+    input_value: values,
+  });
+  if (response.ok) {
+    console.log('Thanks for the info');
+  } else {
+    console.log('Thanks for the info although api does not work!');
+  }
 };
 
 const renderInput = ({
@@ -84,13 +102,17 @@ const PollScreenForm = props => {
   return (
     <View style={[formStyles.container]}>
       <Text>Name:</Text>
-      <Field name="first_name" component={renderInput} />
+      <Field
+        name="first_name"
+        component={renderInput}
+        normalize={correctName}
+      />
       <Text>Surname:</Text>
-      <Field name="last_name" component={renderInput} />
+      <Field name="last_name" component={renderInput} normalize={correctName} />
       <Text>Thoughts on application:</Text>
       <Field name="app_review" component={renderInput} />
       <Text>Phone number:</Text>
-      <Field name="phone" component={renderInput} />
+      <Field name="phone" component={renderInput} normalize={numberOnly} />
       <TouchableOpacity disabled={submitting} onPress={handleSubmit(submit)}>
         <Text style={[formStyles.button]}>Submit</Text>
       </TouchableOpacity>
@@ -124,9 +146,9 @@ const mapStateToProps = state => {
 };
 
 const PollScreen = reduxForm({
-  form: 'test',
+  form: 'poll',
   validate,
 })(PollScreenForm);
 
-const selector = formValueSelector('test'); // <-- same as form name
+const selector = formValueSelector('poll'); // <-- same as form name
 export default connect(mapStateToProps)(PollScreen);
