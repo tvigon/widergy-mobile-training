@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 
 import {
@@ -8,7 +8,8 @@ import {
   getNumButt,
 } from '../../utils';
 
-import {actionCreators} from '../../redux/history/actions';
+import {actions, actionCreators} from '../../redux/history/actions';
+import {actionCreatorsAuth} from '../../redux/auth/actions';
 
 import homeStyles from './styles';
 import MyButton from '../../components/MyButton';
@@ -16,7 +17,7 @@ import MyButton from '../../components/MyButton';
 import {OP_ARRAY, NUM_ARRAY} from './constants';
 import {Button, SafeAreaView, Text, View} from 'react-native';
 
-const HomeScreen = ({navigation, dispatch, historyArr}) => {
+const HomeScreen = ({navigation, dispatch, onActivateSnackBar}) => {
   const [value, setValue] = useState('');
   const [logExpression, setLogExpression] = useState();
   const [booleanSolve, setBooleanSolve] = useState(false);
@@ -34,17 +35,36 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
   );
   const POINT_DEL_BUTT = getPointDelButt(setValue, setBooleanSolve);
 
+  useEffect(() => {
+    dispatch(actionCreators.getExpressions());
+  }, [dispatch]);
+
   return (
     <SafeAreaView style={homeStyles.container}>
       <View style={homeStyles.screen}>
         <Text style={homeStyles.screenText}>{value}</Text>
         <View style={[homeStyles.historyButt]}>
           <Button
+            title="LOGOUT"
+            onPress={() => {
+              dispatch(
+                actionCreatorsAuth.logoutUser(navigation, onActivateSnackBar),
+              );
+            }}
+            style={[homeStyles.screenButtons]}
+          />
+          <Button
+            title="POLL"
+            onPress={() => navigation.navigate('Poll')}
+            style={[homeStyles.screenButtons]}
+          />
+          <Button
             title="SAVE HISTORY"
             onPress={() => {
               dispatch(
-                actionCreators.addExpression(
+                actionCreators.saveExpression(
                   booleanSolve ? logExpression : value,
+                  onActivateSnackBar,
                 ),
               );
             }}
@@ -83,10 +103,4 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    historyArr: state.history.historyLog,
-  };
-};
-
-export default connect(mapStateToProps)(HomeScreen);
+export default connect()(HomeScreen);
