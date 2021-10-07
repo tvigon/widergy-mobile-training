@@ -22,6 +22,7 @@ import Reactotron from './ReactotronConfig';
 
 import HistoryScreen from './screens/HistoryScreen/index';
 import HomeScreen from './screens/HomeScreen/index';
+import LoginScreen from './screens/LoginScreen';
 
 import store from './redux/store';
 
@@ -31,9 +32,10 @@ const App = () => {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator initialRouteName="Login">
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="History" component={HistoryScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
