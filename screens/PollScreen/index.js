@@ -13,77 +13,9 @@ import {
 import {actionCreatorsForm} from '../../redux/form/actions';
 import formStyles from './styles';
 
-import api from '../../config/api';
-
 import {Field, reduxForm, formValueSelector} from 'redux-form'; // <---- LOOK HERE
 
-const validate = values => {
-  const errors = {};
-
-  if (!values.first_name) {
-    errors.first_name = 'First name is required.';
-  }
-
-  if (!values.last_name) {
-    errors.last_name = 'Last name is required.';
-  }
-
-  if (!values.app_review) {
-    errors.app_review = 'Give us feedback!';
-  } else if (values.app_review.length > 200) {
-    errors.app_review = 'not too long :)';
-  }
-
-  if (!values.phone) {
-    errors.phone = 'Phone is required';
-  } else if (!/^([0-9]{10})$/i.test(values.phone)) {
-    errors.phone = 'Phone number must have 10 digits';
-  }
-  return errors;
-};
-
-const correctName = value => {
-  if (!value) {
-    return value;
-  }
-  return value.replace(/[\d\W]/g, '');
-};
-
-const numberOnly = value => {
-  if (!value) {
-    return value;
-  }
-  return value.replace(/[^\d]/g, '');
-};
-
-const submit = async values => {
-  const response = await api.post('/form_responses', {
-    input_value: values,
-  });
-  if (response.ok) {
-    console.log('Thanks for the info');
-  } else {
-    console.log('Thanks for the info although api does not work!');
-  }
-};
-
-const renderInput = ({
-  input: {onChange, ...restInput},
-  meta: {touched, error, warning},
-}) => {
-  return (
-    <View>
-      <TextInput
-        style={[formStyles.input]}
-        onChangeText={onChange}
-        {...restInput}
-      />
-      {touched &&
-        ((error && <Text>{error}</Text>) ||
-          (warning && <Text>{warning}</Text>))}
-    </View>
-  );
-};
+import {validate, correctName, numberOnly, submit, renderInput} from './utils';
 
 const PollScreenForm = props => {
   const {
@@ -95,6 +27,7 @@ const PollScreenForm = props => {
     hasFirstName,
     hasLastName,
     dispatch,
+    onActivateSnackBar,
   } = props;
 
   let completeName = {first_name: '', last_name: ''};
@@ -113,7 +46,11 @@ const PollScreenForm = props => {
       <Field name="app_review" component={renderInput} />
       <Text>Phone number:</Text>
       <Field name="phone" component={renderInput} normalize={numberOnly} />
-      <TouchableOpacity disabled={submitting} onPress={handleSubmit(submit)}>
+      <TouchableOpacity
+        disabled={submitting}
+        onPress={handleSubmit(values => {
+          submit(values, onActivateSnackBar);
+        })}>
         <Text style={[formStyles.button]}>Submit</Text>
       </TouchableOpacity>
       <TouchableOpacity

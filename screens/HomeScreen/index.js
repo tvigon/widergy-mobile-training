@@ -17,7 +17,7 @@ import MyButton from '../../components/MyButton';
 import {OP_ARRAY, NUM_ARRAY} from './constants';
 import {Button, SafeAreaView, Text, View} from 'react-native';
 
-const HomeScreen = ({navigation, dispatch, historyArr}) => {
+const HomeScreen = ({navigation, dispatch, onActivateSnackBar}) => {
   const [value, setValue] = useState('');
   const [logExpression, setLogExpression] = useState();
   const [booleanSolve, setBooleanSolve] = useState(false);
@@ -47,7 +47,9 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
           <Button
             title="LOGOUT"
             onPress={() => {
-              dispatch(actionCreatorsAuth.logoutUser(navigation));
+              dispatch(
+                actionCreatorsAuth.logoutUser(navigation, onActivateSnackBar),
+              );
             }}
             style={[homeStyles.screenButtons]}
           />
@@ -62,6 +64,7 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
               dispatch(
                 actionCreators.saveExpression(
                   booleanSolve ? logExpression : value,
+                  onActivateSnackBar,
                 ),
               );
             }}
@@ -100,10 +103,4 @@ const HomeScreen = ({navigation, dispatch, historyArr}) => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    historyArr: state.history.historyLog,
-  };
-};
-
-export default connect(mapStateToProps)(HomeScreen);
+export default connect()(HomeScreen);

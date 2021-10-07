@@ -79,7 +79,7 @@ const privateActionCreators = {
 };
 
 export const actionCreators = {
-  saveExpression: text => async dispatch => {
+  saveExpression: (text, onActivateSnackBar) => async dispatch => {
     if (text === '') {
       return {
         type: 'NOTHING',
@@ -99,11 +99,13 @@ export const actionCreators = {
         ),
       );
       dispatch(actionCreators.getExpressions());
+      onActivateSnackBar('The expression was saved successfully!');
     } else {
       dispatch(privateActionCreators.saveExpressionFailure(response.data));
+      onActivateSnackBar('There was an error trying to save the expression!');
     }
   },
-  modifyExpression: (id, text) => async dispatch => {
+  modifyExpression: (id, text, onActivateSnackBar) => async dispatch => {
     dispatch({type: actions.EDIT_EXPRESSION});
     const response = await api.put(`/calc/expressions/${id}`, {
       expression: text,
@@ -116,9 +118,10 @@ export const actionCreators = {
       dispatch(
         privateActionCreators.editExpressionFailure(response.data.error),
       );
+      onActivateSnackBar('There was an error editing the expression');
     }
   },
-  deleteExpression: id => async dispatch => {
+  deleteExpression: (id, onActivateSnackBar) => async dispatch => {
     dispatch({type: actions.DELETE_EXPRESSION});
     const response = await api.delete(
       '/calc/expressions',
@@ -129,13 +132,15 @@ export const actionCreators = {
       dispatch(
         privateActionCreators.deleteExpressionSuccess(response.data, id),
       );
+      onActivateSnackBar('Expression deleted successfully!');
     } else {
       dispatch(
         privateActionCreators.deleteExpressionFailure(response.data.error),
       );
+      onActivateSnackBar('There was an error deleting the expression');
     }
   },
-  deleteAllExpressions: idArr => async dispatch => {
+  deleteAllExpressions: (idArr, onActivateSnackBar) => async dispatch => {
     dispatch({type: actions.DELETE_ALL});
     const response = await api.delete(
       '/calc/expressions',
@@ -144,8 +149,10 @@ export const actionCreators = {
     );
     if (response.ok) {
       dispatch(privateActionCreators.deleteAllSuccess(response.data));
+      onActivateSnackBar('All expressions deleted successfully!');
     } else {
       dispatch(privateActionCreators.deleteAllFailure(response.data.error));
+      onActivateSnackBar('There was an error deleting all expressions');
     }
   },
   getExpressions: () => async dispatch => {

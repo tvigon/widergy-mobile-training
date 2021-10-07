@@ -70,12 +70,14 @@ const reducerDescription = {
       logoutUserError: true,
       serverResponse: action.payload,
     }),
-    [actions.LOGOUT_USER_SUCCESS]: (state, action) => ({
-      ...state,
-      logoutUserLoading: false,
-      logoutUserError: false,
-      serverResponse: action.payload,
-    }),
+    [actions.LOGOUT_USER_SUCCESS]: (state, action) => {
+      return {
+        ...state,
+        logoutUserLoading: false,
+        logoutUserError: false,
+        serverResponse: action.payload,
+      };
+    },
   },
 };
 export default createReducer(initialState, completeReducer(reducerDescription));

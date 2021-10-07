@@ -1,6 +1,12 @@
 import {StyleSheet} from 'react-native';
 
 const formStyles = StyleSheet.create({
+  container: {
+    backgroundColor: 'lightblue',
+    flex: 1,
+    alignItems: 'center',
+    paddingTop: 24,
+  },
   button: {
     backgroundColor: 'blue',
     color: 'white',
@@ -10,7 +16,6 @@ const formStyles = StyleSheet.create({
     textAlign: 'center',
     width: 250,
   },
-  container: {backgroundColor: 'lightblue', flex: 1},
   input: {
     borderColor: 'black',
     borderWidth: 1,

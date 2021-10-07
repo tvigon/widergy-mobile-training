@@ -7,7 +7,7 @@ import {ScrollView, TextInput, View} from 'react-native';
 import historyStyles from '../styles';
 import MyButton from '../../../components/MyButton';
 
-export const Expression = ({dispatch, id, text}) => {
+export const Expression = ({dispatch, id, text, onActivateSnackBar}) => {
   const [textIn, setText] = useState('');
   const [editingBool, setEditingBool] = useState(false);
   return (
@@ -19,15 +19,19 @@ export const Expression = ({dispatch, id, text}) => {
           setEditingBool(true);
           setText(textChange);
         }}
-        onSubmitEditing={() => {
+        onEndEditing={() => {
           setEditingBool(false);
-          dispatch(actionCreators.modifyExpression(id, textIn));
+          dispatch(
+            actionCreators.modifyExpression(id, textIn, onActivateSnackBar),
+          );
         }}
         value={editingBool ? textIn : text}
       />
       <MyButton
         label={'x'}
-        press={() => dispatch(actionCreators.deleteExpression(id))}
+        press={() =>
+          dispatch(actionCreators.deleteExpression(id, onActivateSnackBar))
+        }
         style={[historyStyles.delButton]}
       />
     </View>

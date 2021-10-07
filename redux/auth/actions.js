@@ -48,7 +48,7 @@ const privateActionCreators = {
 };
 
 export const actionCreatorsAuth = {
-  createUser: (navigation, userData) => async dispatch => {
+  createUser: (navigation, onActivateSnackBar, userData) => async dispatch => {
     dispatch({type: actions.CREATE_USER, payload: userData});
     const response = await api.post('/auth/create', userData);
     if (response.ok) {
@@ -57,9 +57,10 @@ export const actionCreatorsAuth = {
       navigation.navigate('Home');
     } else {
       dispatch(privateActionCreators.createUserFailure(response.data));
+      onActivateSnackBar('There was an error creating the account');
     }
   },
-  loginUser: (navigation, userData) => async dispatch => {
+  loginUser: (navigation, onActivateSnackBar, userData) => async dispatch => {
     dispatch({type: actions.LOGIN_USER, payload: userData});
     const response = await api.post('/auth/login', userData);
     if (response.ok) {
@@ -68,9 +69,10 @@ export const actionCreatorsAuth = {
       navigation.navigate('Home');
     } else {
       dispatch(privateActionCreators.loginUserFailure(response.data));
+      onActivateSnackBar('Could not log in, do you have an account?');
     }
   },
-  logoutUser: navigation => async dispatch => {
+  logoutUser: (navigation, onActivateSnackBar) => async dispatch => {
     dispatch({type: actions.LOGIN_USER});
     const response = await api.get('/auth/logout');
     if (response.ok) {
@@ -78,6 +80,7 @@ export const actionCreatorsAuth = {
       navigation.navigate('Login');
     } else {
       dispatch(privateActionCreators.logoutUserFailure(response.data.error));
+      onActivateSnackBar('There was an error trying to logout');
     }
   },
 };

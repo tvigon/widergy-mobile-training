@@ -1,10 +1,14 @@
 import {StyleSheet} from 'react-native';
 
 const loginStyles = StyleSheet.create({
-  container: {backgroundColor: 'lightblue', flex: 1},
+  container: {
+    backgroundColor: 'lightblue',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   row: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
   },
   button: {
     backgroundColor: 'blue',
